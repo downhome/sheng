@@ -26,7 +26,8 @@ the xml looks as follows:
     </w:r>
   </w:fldSimple>
 
-We can replace this entire w:fldSimple tag with the passed in 'first_name',
+We can replace this entire w:fldSimple tag with:
+  <w:t>Bobby</w:t>
 
 [[CheckBoxes]]
 The name of the ckeckbox can be found in this tag, there is also a bookmark with the same name.

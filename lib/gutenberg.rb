@@ -7,6 +7,7 @@
 unless defined?(Rails)
   require 'active_support/inflector'
   require 'active_support/concern'
+  require 'gutenberg/support'
   require 'gutenberg/version'
   require 'gutenberg/helpers'
   require 'gutenberg/replacer_base'
@@ -14,13 +15,14 @@ unless defined?(Rails)
   require 'gutenberg/check_boxes'
   require 'gutenberg/tables'
   require 'gutenberg/strings'
-  require 'gutenberg/exceptions'  
+  require 'gutenberg/exceptions'
 end
 
 require 'zip'
 require 'nokogiri'
 require 'fileutils'
 require 'gutenberg/helpers'
+require 'json'
 
 # Add ability to run gem rake tasks from Rails env.
 require 'gutenberg/railtie' if defined?(Rails)
@@ -39,13 +41,7 @@ module Gutenberg
       #
       # params_json.to_s - adds availability to receive params json as json or Hash
       #
-      @params_hash = eval(params_json.to_s)
-
-      PARAMS_KEYS.each do |k|
-        eval("@#{k} ||= " + '"Gutenberg::#{k.to_s.camelize}".constantize.new' )
-      end
-    rescue
-      raise Gutenberg::InputArgumentError.new
+      @params_hash = Gutenberg::Support.symbolize_keys( params_json.is_a?(Hash) ? params_json : JSON.parse(params_json) )
     end
 
     #
@@ -73,11 +69,12 @@ module Gutenberg
     #
     def replace file_path
       xml = PARAMS_KEYS.each_with_object(Nokogiri::XML(@zip_file.read(file_path))) do |k, xml|
-        xml = eval("@#{k.to_s}").replace(@params_hash[k], xml) if @params_hash.include?(k)        
+        instance = "Gutenberg::#{k.to_s.camelize}".constantize.new
+        xml = instance.replace(@params_hash[k], xml) if @params_hash.include?(k)
       end
 
       fields = get_unmerged_fields(xml)
-      raise Gutenberg::MergefieldNotReplacedError.new(fields) if fields.size > 0      
+      raise Gutenberg::MergefieldNotReplacedError.new(fields) if fields.size > 0
       xml
     end
 

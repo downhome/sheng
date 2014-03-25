@@ -1,17 +1,37 @@
 require_relative '../spec_helper'
 
 describe Gutenberg::Docx do
-  
+
   include_context "lets"
 
-  it 'should produce the same document as fixtures output_file' do
-    doc.generate(output_file)
-    fixtures_output_dox_file.entries.each do |file|
-      if mutable_documents.include?(file.name)
-        gem_output_xml      = Zip::File.new( output_file ).read(file)
-        fixtures_output_xml = fixtures_output_dox_file.read(file)
+  context 'json input' do
+    it 'should produce the same document as fixtures output_file' do
+      doc.generate(output_file)
+      fixtures_output_dox_file.entries.each do |file|
+        if mutable_documents.include?(file.name)
+          gem_output_xml      = Zip::File.new( output_file ).read(file)
+          fixtures_output_xml = fixtures_output_dox_file.read(file)
 
-        gem_output_xml.should eq(gem_output_xml)
+          gem_output_xml.should eq(gem_output_xml)
+        end
+      end
+    end
+  end
+
+  context 'hash input' do
+    it 'should produce the same document for input fields as hash' do
+      doc = Gutenberg::Docx.new(
+        File.open("#{SPEC_ROOT}/fixtures/input_document.docx"),
+        JSON.parse(File.open("#{SPEC_ROOT}/fixtures/input.json").read) )
+
+      doc.generate(output_file)
+      fixtures_output_dox_file.entries.each do |file|
+        if mutable_documents.include?(file.name)
+          gem_output_xml      = Zip::File.new( output_file ).read(file)
+          fixtures_output_xml = fixtures_output_dox_file.read(file)
+
+          gem_output_xml.should eq(gem_output_xml)
+        end
       end
     end
   end
@@ -29,7 +49,7 @@ describe Gutenberg::Docx do
 
   it "should create new.docx file after execution" do
     doc.generate("#{SPEC_ROOT}/fixtures/tmp_output_document.docx")
-    
+
     File.exist?("#{SPEC_ROOT}/fixtures/tmp_output_document.docx").should be(true)
   end
 end

@@ -4,7 +4,7 @@ include Gutenberg::Helpers
 describe Gutenberg::Docx do
 
   include_context "lets"
-  
+
   let(:string_fields) {["first_name", "last_name", "a_long_paragraph"]}
 
   let(:tables_fields) {["table_identifier_1", "meal", "drink", "appetizer", "dessert"]}
@@ -16,13 +16,13 @@ describe Gutenberg::Docx do
   end
 
   it "'Gutenberg::Strings.new.replace' should remove strings keys from unmerged fields" do
-    params = eval(input_json)[:strings]
+    params = input_hash[:strings]
     strings_xml = Gutenberg::Strings.new.replace(params, xml)
     get_unmerged_fields(strings_xml).should == (mergefields - string_fields)
   end
 
-  it "'Gutenberg::CheckBoxes.new.replace' should remove check_boxes keys from unmerged fields" do    
-    params = eval(input_json)[:check_boxes]
+  it "'Gutenberg::CheckBoxes.new.replace' should remove check_boxes keys from unmerged fields" do
+    params = input_hash[:check_boxes]
     old_element = find_element("//w:name[contains(@w:val, 'check_me')]", xml).parent.clone
     check_boxes_xml = Gutenberg::CheckBoxes.new.replace(params, xml)
     new_element = find_element("//w:name[contains(@w:val, 'check_me')]", check_boxes_xml).parent
@@ -30,13 +30,13 @@ describe Gutenberg::Docx do
   end
 
   it "'Gutenberg::Tables.new.replace' should remove strings keys from unmerged fields" do
-    params = eval(input_json)[:tables]
+    params = input_hash[:tables]
     tables_xml = Gutenberg::Tables.new.replace(params, xml)
     get_unmerged_fields(tables_xml).should == (mergefields - tables_fields)
   end
 
   it "'Gutenberg::Sequences.new.replace' should remove sequences keys from unmerged fields" do
-    params = eval(input_json)[:sequences]
+    params = input_hash[:sequences]
     sequences_xml = Gutenberg::Sequences.new.replace(params, xml)
     get_unmerged_fields(sequences_xml).should == (mergefields - sequences_fields)
   end

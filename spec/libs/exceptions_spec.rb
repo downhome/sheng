@@ -4,8 +4,8 @@ describe Gutenberg::Docx do
 
   include_context "lets"
 
-  it "should raise an error when empty file supplied" do 
-    lambda { Gutenberg::Docx.new('', '') }.should raise_error( Gutenberg::InputArgumentError )
+  it "should raise an error when empty file supplied" do
+    lambda { Gutenberg::Docx.new('', '') }.should raise_error( Zip::ZipError )
   end
 
   it "should raise an error when one ore more mergefields isn't merged" do

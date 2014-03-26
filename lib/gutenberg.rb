@@ -42,6 +42,8 @@ module Gutenberg
       # params_json.to_s - adds availability to receive params json as json or Hash
       #
       @params_hash = Gutenberg::Support.symbolize_keys( params_json.is_a?(Hash) ? params_json : JSON.parse(params_json) )
+    rescue Zip::ZipError, JSON::ParserError => e
+      raise InputArgumentError.new(e.message)
     end
 
     #

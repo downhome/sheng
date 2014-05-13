@@ -1,35 +1,35 @@
 #
-# Gutenberg::Docx - is a base Mediator whitch delegates responsibilities
-# to another gutenberg singleton classes, which replace their part of xml.
+# Sheng::Docx - is a base Mediator whitch delegates responsibilities
+# to another sheng singleton classes, which replace their part of xml.
 #
 
 # required for standalone usage
 unless defined?(Rails)
   require 'active_support/inflector'
   require 'active_support/concern'
-  require 'gutenberg/support'
-  require 'gutenberg/version'
-  require 'gutenberg/helpers'
-  require 'gutenberg/replacer_base'
-  require 'gutenberg/sequences'
-  require 'gutenberg/check_boxes'
-  require 'gutenberg/tables'
-  require 'gutenberg/strings'
-  require 'gutenberg/exceptions'
+  require 'sheng/support'
+  require 'sheng/version'
+  require 'sheng/helpers'
+  require 'sheng/replacer_base'
+  require 'sheng/sequences'
+  require 'sheng/check_boxes'
+  require 'sheng/tables'
+  require 'sheng/strings'
+  require 'sheng/exceptions'
 end
 
 require 'zip'
 require 'nokogiri'
 require 'fileutils'
-require 'gutenberg/helpers'
+require 'sheng/helpers'
 require 'json'
 
 # Add ability to run gem rake tasks from Rails env.
-require 'gutenberg/railtie' if defined?(Rails)
+require 'sheng/railtie' if defined?(Rails)
 
-module Gutenberg
+module Sheng
   class Docx
-    include Gutenberg::Helpers
+    include Sheng::Helpers
     #
     # Avaliable keys and Mutable xml documents
     #
@@ -41,7 +41,7 @@ module Gutenberg
       #
       # params_json.to_s - adds availability to receive params json as json or Hash
       #
-      @params_hash = Gutenberg::Support.symbolize_keys( params_json.is_a?(Hash) ? params_json : JSON.parse(params_json) )
+      @params_hash = Sheng::Support.symbolize_keys( params_json.is_a?(Hash) ? params_json : JSON.parse(params_json) )
     rescue Zip::ZipError, JSON::ParserError => e
       raise InputArgumentError.new(e.message)
     end
@@ -71,12 +71,12 @@ module Gutenberg
     #
     def replace file_path
       xml = PARAMS_KEYS.each_with_object(Nokogiri::XML(@zip_file.read(file_path))) do |k, xml|
-        instance = "Gutenberg::#{k.to_s.camelize}".constantize.new
+        instance = "Sheng::#{k.to_s.camelize}".constantize.new
         xml = instance.replace(@params_hash[k], xml) if @params_hash.include?(k)
       end
 
       fields = get_unmerged_fields(xml)
-      raise Gutenberg::MergefieldNotReplacedError.new(fields) if fields.size > 0
+      raise Sheng::MergefieldNotReplacedError.new(fields) if fields.size > 0
       xml
     end
 

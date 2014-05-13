@@ -1,8 +1,8 @@
-module Gutenberg
-  class CheckBoxes < Gutenberg::ReplacerBase
+module Sheng
+  class CheckBoxes < Sheng::ReplacerBase
     def replace params, xml
       params.each do |k, v|
-        find_elements("//w:name[contains(@w:val, '#{k}')]", xml).each do |element|          
+        find_elements("//w:name[contains(@w:val, '#{k}')]", xml).each do |element|
           value = v ? "1" : "0"
 
           new_node = Nokogiri::XML::Node.new('checked', xml)

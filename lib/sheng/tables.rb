@@ -1,5 +1,5 @@
-module Gutenberg
-  class Tables < Gutenberg::ReplacerBase
+module Sheng
+  class Tables < Sheng::ReplacerBase
     def replace params, xml
       params.each do |k, v|
         identifier = find_element("//w:tr[.//#{path(k)}]", xml)

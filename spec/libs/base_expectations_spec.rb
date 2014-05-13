@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-describe Gutenberg::Docx do
+describe Sheng::Docx do
 
   include_context "lets"
 
@@ -20,7 +20,7 @@ describe Gutenberg::Docx do
 
   context 'hash input' do
     it 'should produce the same document for input fields as hash' do
-      doc = Gutenberg::Docx.new(
+      doc = Sheng::Docx.new(
         File.open("#{SPEC_ROOT}/fixtures/input_document.docx"),
         JSON.parse(File.open("#{SPEC_ROOT}/fixtures/input.json").read) )
 

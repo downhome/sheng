@@ -1,4 +1,4 @@
-# Gutenberg
+# Sheng
 
 TODO: Write a gem description
 
@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'gutenberg'
+    gem 'sheng'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install gutenberg
+    $ gem install sheng
 
 ## Usage
 
@@ -22,7 +22,7 @@ TODO: Write usage instructions here
 
 ## Test
 
-  Add `gem 'rspec'` to you Gemfile and run `rake gutenberg:test`
+  Add `gem 'rspec'` to you Gemfile and run `rake sheng:test`
 
 ## Contributing
 

@@ -1,4 +1,4 @@
-module Gutenberg
+module Sheng
   module Helpers
     extend ActiveSupport::Concern
 
@@ -9,7 +9,7 @@ module Gutenberg
     def dup_node_set template_set, xml
       template_set.each_with_object(Nokogiri::XML::NodeSet.new(xml)) do |child, dup_content|
         dup_content << child.dup
-      end 
+      end
     end
 
     def new_tag tag_name, xml

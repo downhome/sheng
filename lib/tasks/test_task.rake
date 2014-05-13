@@ -1,7 +1,7 @@
 #
 # Run all specs
 #
-namespace :gutenberg do
+namespace :sheng do
   task :test do
     sh "bundle exec rspec #{File.expand_path '../../../', __FILE__}"
   end

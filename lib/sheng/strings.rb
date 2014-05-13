@@ -1,5 +1,5 @@
-module Gutenberg
-  class Strings < Gutenberg::ReplacerBase
+module Sheng
+  class Strings < Sheng::ReplacerBase
     def replace params, xml
       params.each do |k, v|
         find_elements("//#{path(k)}", xml).each do |element|

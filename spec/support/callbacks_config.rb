@@ -1,7 +1,7 @@
 shared_context "lets" do
 
   let(:doc) do
-    Gutenberg::Docx.new( File.open("#{SPEC_ROOT}/fixtures/input_document.docx"), File.open("#{SPEC_ROOT}/fixtures/input.json").read )
+    Sheng::Docx.new( File.open("#{SPEC_ROOT}/fixtures/input_document.docx"), File.open("#{SPEC_ROOT}/fixtures/input.json").read )
   end
 
   let(:xml) do
@@ -17,7 +17,7 @@ shared_context "lets" do
   end
 
   let(:doc_from_file) do
-    Gutenberg::Docx.new( "#{SPEC_ROOT}/fixtures/input_document.docx", File.open("#{SPEC_ROOT}/fixtures/input.json").read )
+    Sheng::Docx.new( "#{SPEC_ROOT}/fixtures/input_document.docx", File.open("#{SPEC_ROOT}/fixtures/input.json").read )
   end
 
   let(:fixtures_input_dox_file) do
@@ -37,7 +37,7 @@ shared_context "lets" do
   end
 
   let(:input_hash) do
-    Gutenberg::Support.symbolize_keys(JSON.parse(input_json))
+    Sheng::Support.symbolize_keys(JSON.parse(input_json))
   end
 
   let(:input_docx) do

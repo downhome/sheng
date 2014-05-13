@@ -1,7 +1,7 @@
 require_relative '../spec_helper'
-include Gutenberg::Helpers
+include Sheng::Helpers
 
-describe Gutenberg::Docx do
+describe Sheng::Docx do
 
   include_context "lets"
 
@@ -15,29 +15,29 @@ describe Gutenberg::Docx do
     get_unmerged_fields(xml).should == mergefields
   end
 
-  it "'Gutenberg::Strings.new.replace' should remove strings keys from unmerged fields" do
+  it "'Sheng::Strings.new.replace' should remove strings keys from unmerged fields" do
     params = input_hash[:strings]
-    strings_xml = Gutenberg::Strings.new.replace(params, xml)
+    strings_xml = Sheng::Strings.new.replace(params, xml)
     get_unmerged_fields(strings_xml).should == (mergefields - string_fields)
   end
 
-  it "'Gutenberg::CheckBoxes.new.replace' should remove check_boxes keys from unmerged fields" do
+  it "'Sheng::CheckBoxes.new.replace' should remove check_boxes keys from unmerged fields" do
     params = input_hash[:check_boxes]
     old_element = find_element("//w:name[contains(@w:val, 'check_me')]", xml).parent.clone
-    check_boxes_xml = Gutenberg::CheckBoxes.new.replace(params, xml)
+    check_boxes_xml = Sheng::CheckBoxes.new.replace(params, xml)
     new_element = find_element("//w:name[contains(@w:val, 'check_me')]", check_boxes_xml).parent
     old_element.to_xml.should_not eq(new_element.to_xml)
   end
 
-  it "'Gutenberg::Tables.new.replace' should remove strings keys from unmerged fields" do
+  it "'Sheng::Tables.new.replace' should remove strings keys from unmerged fields" do
     params = input_hash[:tables]
-    tables_xml = Gutenberg::Tables.new.replace(params, xml)
+    tables_xml = Sheng::Tables.new.replace(params, xml)
     get_unmerged_fields(tables_xml).should == (mergefields - tables_fields)
   end
 
-  it "'Gutenberg::Sequences.new.replace' should remove sequences keys from unmerged fields" do
+  it "'Sheng::Sequences.new.replace' should remove sequences keys from unmerged fields" do
     params = input_hash[:sequences]
-    sequences_xml = Gutenberg::Sequences.new.replace(params, xml)
+    sequences_xml = Sheng::Sequences.new.replace(params, xml)
     get_unmerged_fields(sequences_xml).should == (mergefields - sequences_fields)
   end
 end

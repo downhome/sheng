@@ -1,4 +1,4 @@
-require 'gutenberg'
+require 'sheng'
 require_relative 'support/callbacks_config'
 
 SPEC_ROOT = File.expand_path '../', __FILE__

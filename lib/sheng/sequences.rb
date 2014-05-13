@@ -1,5 +1,5 @@
-module Gutenberg
-  class Sequences < Gutenberg::ReplacerBase
+module Sheng
+  class Sequences < Sheng::ReplacerBase
     def replace params, xml
       params.each do |k, v|
         template_set = get_node_set(k, xml)

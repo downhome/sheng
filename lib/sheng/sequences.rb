@@ -1,19 +1,22 @@
 module Sheng
   class Sequences < Sheng::ReplacerBase
     def replace params, xml
-      params.each do |k, v|
-        template_set = get_node_set(k, xml)
+      params.each do |sequence_name, sequence_values|
+        template_set = get_node_set(sequence_name, xml)
 
         if template_set.first
-          first_element = find_element("//#{path("start_#{k}")}", xml).parent
-          last_element = find_element("//#{path("end_#{k}")}", xml).parent
+          first_element = find_element("//#{path("start_#{sequence_name}")}", xml).parent
+          last_element = find_element("//#{path("end_#{sequence_name}")}", xml).parent
 
-          v.each do |hash|
+          sequence_values.each do |hash|
             new_node_set = first_element.add_previous_sibling(dup_node_set(template_set, xml))
             new_node_set.after(new_tag("p", xml))
 
             hash.each do |key, value|
               new_node_set.xpath("./#{path(key)}", xml).each{|element| element.replace(new_label_node(value, xml)) }
+                replacement_tag =  new_label_node(value, xml)
+                element.replace(replacement_tag)
+              end
             end
           end
 

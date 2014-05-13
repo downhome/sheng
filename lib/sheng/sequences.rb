@@ -13,7 +13,7 @@ module Sheng
             new_node_set.after(new_tag("p", xml))
 
             hash.each do |key, value|
-              new_node_set.xpath("./#{path(key)}", xml).each{|element| element.replace(new_label_node(value, xml)) }
+              new_node_set.xpath(".//#{path(key)}", xml).each do |element|
                 replacement_tag =  new_label_node(value, xml)
                 element.replace(replacement_tag)
               end

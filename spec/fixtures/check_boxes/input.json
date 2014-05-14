@@ -1,0 +1,7 @@
+{
+  "check_boxes": {
+    "designee_po": true,
+    "designee_co": false,
+    "designee_3p": true
+  }
+}

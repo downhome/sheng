@@ -5,7 +5,7 @@ shared_context "lets" do
   end
 
   let(:xml) do
-    Nokogiri::XML(fixtures_input_dox_file.read("word/document.xml"))
+    Nokogiri::XML(fixtures_input_docx_file.read("word/document.xml"))
   end
 
   let(:mergefields) do
@@ -20,11 +20,11 @@ shared_context "lets" do
     Sheng::Docx.new( "#{SPEC_ROOT}/fixtures/input_document.docx", File.open("#{SPEC_ROOT}/fixtures/input.json").read )
   end
 
-  let(:fixtures_input_dox_file) do
+  let(:fixtures_input_docx_file) do
     Zip::File.new( "#{SPEC_ROOT}/fixtures/input_document.docx" )
   end
 
-  let(:fixtures_output_dox_file) do
+  let(:fixtures_output_docx_file) do
     Zip::File.new( "#{SPEC_ROOT}/fixtures/output_document.docx" )
   end
 

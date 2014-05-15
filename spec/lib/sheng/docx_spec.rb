@@ -1,5 +1,3 @@
-require_relative '../spec_helper'
-
 describe Sheng::Docx do
 
   include_context "lets"

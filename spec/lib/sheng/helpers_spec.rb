@@ -1,6 +1,3 @@
-require_relative '../spec_helper'
-include Sheng::Helpers
-
 describe Sheng::Helpers do
 
   include_context "lets"

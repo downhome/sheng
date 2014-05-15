@@ -1,4 +1,3 @@
-require 'spec_helper'
 describe Sheng::Sequences do
   let(:input_hash) { Sheng::Support.symbolize_keys(JSON.parse(input_json)) }
   let(:params) { input_hash[:sequences] }

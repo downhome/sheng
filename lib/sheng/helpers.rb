@@ -1,7 +1,5 @@
 module Sheng
   module Helpers
-    extend ActiveSupport::Concern
-
     def path key
       "w:fldSimple[contains(@w:instr, '#{key}') and contains(@w:instr, 'MERGEFIELD')]"
     end

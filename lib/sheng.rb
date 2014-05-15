@@ -51,14 +51,18 @@ module Sheng
     #
     def generate path
       buffer = Zip::OutputStream.write_buffer do |out|
-        @zip_file.entries.each do |entry|
-          if entry_for_replacing?(entry.name)
-            out.put_next_entry(entry.name)
-            out.write replace(entry.name).to_s
-          else
-            out.put_next_entry(entry.name)
-            out.write entry.get_input_stream.read
+        begin
+          @zip_file.entries.each do |entry|
+            if entry_for_replacing?(entry.name)
+              out.put_next_entry(entry.name)
+              out.write replace(entry.name).to_s
+            else
+              out.put_next_entry(entry.name)
+              out.write entry.get_input_stream.read
+            end
           end
+        ensure
+          out.close_buffer
         end
       end
 

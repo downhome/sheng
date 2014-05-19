@@ -3,29 +3,22 @@
 # to another sheng singleton classes, which replace their part of xml.
 #
 
-# required for standalone usage
-unless defined?(Rails)
-  require 'active_support/inflector'
-  require 'active_support/concern'
-  require 'sheng/support'
-  require 'sheng/version'
-  require 'sheng/helpers'
-  require 'sheng/replacer_base'
-  require 'sheng/sequences'
-  require 'sheng/check_boxes'
-  require 'sheng/tables'
-  require 'sheng/strings'
-  require 'sheng/exceptions'
-end
+require 'active_support/inflector'
+require 'sheng/support'
+require 'sheng/version'
+require 'sheng/helpers'
+require 'sheng/replacer_base'
+require 'sheng/sequences'
+require 'sheng/check_boxes'
+require 'sheng/tables'
+require 'sheng/strings'
+require 'sheng/exceptions'
 
 require 'zip'
 require 'nokogiri'
 require 'fileutils'
 require 'sheng/helpers'
 require 'json'
-
-# Add ability to run gem rake tasks from Rails env.
-require 'sheng/railtie' if defined?(Rails)
 
 module Sheng
   class Docx

@@ -50,8 +50,8 @@ describe Sheng::Helpers do
       tag.should == find_tag
     end
 
-    it "helper 'new_label_node' should add new text label to document" do
-      tag = new_label_node('test_content', @xml)
+    it "helper 'new_text_run_node' should add new text label to document" do
+      tag = new_text_run_node('test_content', @xml)
       @xml.root.add_child(tag)
 
       find_tag = @xml.xpath("//w:t[contains(.,'test_content')]").first.parent

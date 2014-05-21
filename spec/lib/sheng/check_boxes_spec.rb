@@ -1,5 +1,5 @@
 describe Sheng::CheckBoxes do
-  let(:input_hash) { Sheng::Support.symbolize_keys(JSON.parse(input_json)) }
+  let(:input_hash) { JSON.parse(input_json).deep_symbolize_keys }
   let(:params) { input_hash[:check_boxes] }
   let(:input_json) { File.open("#{SPEC_ROOT}/fixtures/check_boxes/input.json").read }
   let(:input_xml) { Nokogiri::XML(File.read(fixture_path('check_boxes/input_document.xml'))) }

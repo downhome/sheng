@@ -9,7 +9,7 @@ shared_context "lets" do
   end
 
   let(:mergefields) do
-    ["first_name", "last_name", "a_long_paragraph", "table_identifier_1", "meal", "drink", "appetizer", "dessert", "start_owner_signature", "end_owner_signature"]
+    ["first_name", "last_name", "a_long_paragraph", "start_meals", "meal", "drink", "appetizer", "dessert", "end_meals", "start_owners", "end_owners"]
   end
 
   let(:mutable_documents) do
@@ -37,7 +37,7 @@ shared_context "lets" do
   end
 
   let(:input_hash) do
-    Sheng::Support.symbolize_keys(JSON.parse(input_json))
+    JSON.parse(input_json).deep_symbolize_keys
   end
 
   let(:input_docx) do

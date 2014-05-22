@@ -12,8 +12,10 @@ module Sheng
     end
 
     def interpolate(data_set)
-      checked_attribute = @element.search('.//w:default').first.attribute('val')
-      checked_attribute.value = '1' if data_set.fetch(key).to_s == 'true'
+      if value = data_set.fetch(key)
+        checked_attribute = @element.search('.//w:default').first.attribute('val')
+        checked_attribute.value = '1' if value.to_s == 'true'
+      end
     end
   end
 end

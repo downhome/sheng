@@ -10,6 +10,12 @@ module Sheng
       end
     end
 
+    def new_tag tag_name, xml
+      tag = Nokogiri::XML::Node.new(tag_name, xml)
+      tag.namespace = xml.document.root.namespace_definitions.find { |ns| ns.prefix == "w" }
+      tag
+    end
+
     def find_element criteria, xml
       find_elements(criteria, xml).first
     end

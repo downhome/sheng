@@ -15,25 +15,19 @@ class Sheng::MergeField
   end
 
   def xml
-    @element.ancestors.last
+    @element.document
   end
 
   def interpolate(data_set)
     value = data_set.fetch(key)
-    @element.replace(new_text_run_node(value))
+    @element.replace(new_text_run_node(value)) if value
   end
 
   def new_text_run_node value
-    r_tag = new_tag('r')
-    t_tag = new_tag('t')
+    r_tag = new_tag('r', xml)
+    t_tag = new_tag('t', xml)
     t_tag.content = value
     r_tag.add_child(t_tag)
     r_tag
-  end
-
-  def new_tag tag_name
-    tag = Nokogiri::XML::Node.new(tag_name, xml)
-    tag.namespace = xml.document.root.namespace_definitions.find { |ns| ns.prefix == "w" }
-    tag
   end
 end

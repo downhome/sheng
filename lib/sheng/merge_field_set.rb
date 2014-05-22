@@ -14,6 +14,16 @@ module Sheng
       end
     end
 
+    def to_tree
+      nodes.map do |node|
+        hsh = { :type => node.class, :key => node.key }
+        if node.is_a? MergeFieldSet
+          hsh[:nodes] = node.to_tree
+        end
+        hsh
+      end
+    end
+
     def nodes
       current_sequence_key = nil
       basic_nodes.map do |node|

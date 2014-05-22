@@ -11,17 +11,28 @@ module Sheng
       /word\/footer(\d)*.xml/
     ]
 
-    def initialize(docx_file, params)
-      @zip_file = docx_file.is_a?(String) ? Zip::File.new(docx_file) : Zip::File.open(docx_file.path)
+    def initialize(input_file_path, params)
+      @input_zip_file = Zip::File.new(input_file_path)
       @data_set = Sheng::DataSet.new(params)
-    rescue Zip::ZipError
+    rescue Zip::ZipError => e
       raise InputArgumentError.new(e.message)
+    end
+
+    def to_tree
+      @input_zip_file.entries.map do |entry|
+        if is_wml_file?(entry.name)
+          {
+            :file => entry.name,
+            :tree => WMLFile.new(entry.get_input_stream.read).to_tree
+          }
+        end
+      end.compact
     end
 
     def generate path
       buffer = Zip::OutputStream.write_buffer do |out|
         begin
-          @zip_file.entries.each do |entry|
+          @input_zip_file.entries.each do |entry|
             write_converted_zip_file_to_buffer(entry, out)
           end
         ensure
@@ -36,6 +47,8 @@ module Sheng
       contents = entry.get_input_stream.read
       buffer.put_next_entry(entry.name)
       if is_wml_file?(entry.name)
+        wml_file = WMLFile.new(contents)
+        wml_file.validate!
         buffer.write WMLFile.new(contents).interpolate(@data_set)
       else
         buffer.write contents

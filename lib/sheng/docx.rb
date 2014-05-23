@@ -15,7 +15,7 @@ module Sheng
       @input_zip_file = Zip::File.new(input_file_path)
       @data_set = Sheng::DataSet.new(params)
     rescue Zip::ZipError => e
-      raise InputArgumentError.new(e.message)
+      raise ArgumentError.new(e.message)
     end
 
     def to_tree

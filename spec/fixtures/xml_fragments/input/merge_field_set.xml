@@ -1,0 +1,76 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">First Name: </w:t>
+    </w:r>
+    <w:fldSimple w:instr=" MERGEFIELD  person.first_name \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«person.first_name»</w:t>
+      </w:r>
+    </w:fldSimple>
+    <w:r>
+      <w:tab/>
+      <w:t xml:space="preserve">Last Name: </w:t>
+    </w:r>
+    <w:fldSimple w:instr=" MERGEFIELD person.last_name \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«person.last_name»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD start:person.socks \* MERGEFORMAT ">
+      <w:r w:rsidR="00455C8A">
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«start:person.socks»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD color \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«color»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD size \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«size»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD end:person.socks \* MERGEFORMAT ">
+      <w:r w:rsidR="00455C8A">
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«end:person.socks»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:ffData>
+    <w:name w:val="veggies.green.spinach"/>
+    <w:enabled/>
+    <w:calcOnExit w:val="0"/>
+    <w:checkBox>
+      <w:sizeAuto/>
+      <w:default w:val="0"/>
+    </w:checkBox>
+  </w:ffData>
+</w:document>

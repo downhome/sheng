@@ -1,7 +1,8 @@
 require 'sheng'
-require_relative 'support/path_helper'
+require 'equivalent-xml'
+require 'equivalent-xml/rspec_matchers'
 
-SPEC_ROOT = File.expand_path '../', __FILE__
+Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -9,4 +10,5 @@ RSpec.configure do |config|
   config.filter_run :focus
   config.order = 'random'
   config.include PathHelper
+  config.include XMLHelper
 end

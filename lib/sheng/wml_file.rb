@@ -1,6 +1,11 @@
 module Sheng
   class WMLFile
     class InvalidWML < StandardError; end
+    class MergefieldNotReplacedError < StandardError
+      def initialize(field_names)
+        super("Mergefields not replaced: #{field_names.join(", ")}")
+      end
+    end
 
     attr_reader :xml
 
@@ -21,7 +26,7 @@ module Sheng
       end.uniq
 
       unless unmerged_fields.empty?
-        raise Sheng::MergefieldNotReplacedError.new(unmerged_fields)
+        raise MergefieldNotReplacedError.new(unmerged_fields)
       end
     end
 

@@ -1,6 +1,5 @@
 module Sheng
   class CheckBox
-    include Sheng::Helpers
     attr_reader :element
 
     def initialize(element = nil)
@@ -12,10 +11,15 @@ module Sheng
     end
 
     def interpolate(data_set)
-      if value = data_set.fetch(key)
-        checked_attribute = @element.search('.//w:default').first.attribute('val')
-        checked_attribute.value = '1' if value.to_s == 'true'
-      end
+      value = data_set.fetch(key)
+      checked_attribute = @element.search('.//w:default').first.attribute('val')
+      checked_attribute.value = value_is_truthy?(value) ? '1' : '0'
+    rescue Sheng::DataSet::KeyNotFound
+      nil
+    end
+
+    def value_is_truthy?(value)
+      ['true', '1', 'yes'].include? value.to_s.downcase
     end
   end
 end

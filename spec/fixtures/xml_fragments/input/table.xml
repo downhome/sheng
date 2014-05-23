@@ -1,0 +1,134 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:tbl>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Meal</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Drink</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Appetizer</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Dessert</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD start:meals \* MERGEFORMAT ">
+            <w:r w:rsidR="002E3E51">
+              <w:rPr>
+                <w:noProof/>
+              </w:rPr>
+              <w:t>«start:meals»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD meal \* MERGEFORMAT ">
+            <w:r w:rsidR="00623574">
+              <w:rPr>
+                <w:noProof/>
+              </w:rPr>
+              <w:t>«meal»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD appetizer \* MERGEFORMAT ">
+            <w:r w:rsidR="00623574">
+              <w:rPr>
+                <w:noProof/>
+              </w:rPr>
+              <w:t>«appetizer»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD dessert \* MERGEFORMAT ">
+            <w:r w:rsidR="00623574">
+              <w:rPr>
+                <w:noProof/>
+              </w:rPr>
+              <w:t>«dessert»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD drink \* MERGEFORMAT ">
+            <w:r w:rsidR="00E069D4">
+              <w:rPr>
+                <w:noProof/>
+              </w:rPr>
+              <w:t>«drink»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD end:meals \* MERGEFORMAT ">
+            <w:r w:rsidR="002E3E51">
+              <w:rPr>
+                <w:noProof/>
+              </w:rPr>
+              <w:t>«end:meals»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+    </w:tr>
+  </w:tbl>
+</w:document>

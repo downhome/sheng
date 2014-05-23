@@ -1,0 +1,11 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:ffData>
+    <w:name w:val="goats"/>
+    <w:enabled/>
+    <w:calcOnExit w:val="0"/>
+    <w:checkBox>
+      <w:sizeAuto/>
+      <w:default w:val="1"/>
+    </w:checkBox>
+  </w:ffData>
+</w:document>

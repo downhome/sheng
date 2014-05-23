@@ -1,23 +1,40 @@
 module Sheng
   class DataSet
+    class KeyNotFound < StandardError; end
+
+    attr_accessor :raw_hash
+
     def initialize(hsh)
-      raise ArgumentError unless hsh.is_a? Hash
-      @raw_data_hash = hsh.deep_symbolize_keys
+      raise ArgumentError.new("must be initialized with a Hash") unless hsh.is_a?(Hash)
+      @raw_hash = hsh.deep_symbolize_keys
+    end
+
+    def raise_key_too_long(key, key_part)
+      raise KeyNotFound, "in #{key}, #{key_part} did not return a Hash"
+    end
+
+    def raise_key_too_short(key)
+      raise KeyNotFound, "result at #{key} is a Hash"
     end
 
     def fetch(key)
+      raise ArgumentError.new("must provide a string") unless key.is_a?(String)
       key_parts = key.split(/\./)
-      current_result = @raw_data_hash
+      current_result = raw_hash
 
       key_parts.each_with_index do |key_part, i|
-        value = current_result[key_part.to_sym]
+        begin
+          value = current_result.fetch(key_part.to_sym)
+        rescue KeyError
+          raise KeyNotFound, "did not find in dataset: #{key} (#{key_part} not found)"
+        end
         if (i + 1) < key_parts.length
-          raise "Too many parts in key" if !(value.is_a?(Hash))
+          raise_key_too_long(key, key_part) if !(value.is_a?(Hash))
         end
         current_result = value
       end
 
-      raise "Too few parts in key" if current_result.is_a?(Hash)
+      raise_key_too_short(key) if current_result.is_a?(Hash)
       current_result
     end
   end

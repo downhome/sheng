@@ -1,6 +1,3 @@
-require 'equivalent-xml'
-require 'equivalent-xml/rspec_matchers'
-
 describe Sheng::Docx do
   let(:output_file) { "/tmp/sheng_output_document.docx" }
   let(:expected_output_file) { fixture_path("output_document.docx") }
@@ -44,20 +41,20 @@ describe Sheng::Docx do
       doc = Sheng::Docx.new(input_file, incomplete_hash)
       expect {
         doc.generate(output_file)
-      }.to raise_error(Sheng::MergefieldNotReplacedError)
+      }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError)
     end
 
-    it "should raise an error when bad document supplied" do
-      bad_documents = [
-        'with_bad_table.docx',
-        'with_extra_field.docx',
-        'with_extra_sequence.docx'
-      ]
-      bad_documents.each do |doc_path|
+    bad_documents = [
+      'with_bad_table.docx',
+      'with_extra_field.docx',
+      'with_extra_sequence.docx'
+    ]
+    bad_documents.each do |doc_path|
+      it "should raise an error when bad document #{doc_path} supplied" do
         doc = Sheng::Docx.new(fixture_path("bad_docx_files/#{doc_path}"), input_hash)
         expect {
           doc.generate(output_file)
-        }.to raise_error(Sheng::MergefieldNotReplacedError)
+        }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError)
       end
     end
 
@@ -75,7 +72,7 @@ describe Sheng::Docx do
       allow(Zip::File).to receive(:new).with('crazy_path').and_raise(Zip::ZipError)
       expect {
         Sheng::Docx.new('crazy_path', {})
-      }.to raise_error(Sheng::InputArgumentError)
+      }.to raise_error(ArgumentError)
     end
 
     it "should raise an ArgumentError if params is not a hash" do

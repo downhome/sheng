@@ -3,21 +3,24 @@ module Sheng
     def initialize(merge_field)
       @start_merge_field = merge_field
       @key = merge_field.key
-      @start_node, @xml, @end_node = get_bounds_and_node_set
+      @xml = merge_field.xml
+      @start_node, @xml_fragment, @end_node = get_bounds_and_node_set
     end
 
     def interpolate(data_set)
       collection = data_set.fetch(key)
-      if collection
+      if collection.respond_to?(:each_with_index)
         collection.each_with_index do |item, i|
-          new_node_set = @start_node.add_previous_sibling(dup_node_set(xml, xml.first.document))
+          new_node_set = @start_node.add_previous_sibling(dup_node_set)
           merge_field_set = MergeFieldSet.new("#{key}_#{i}", new_node_set)
           merge_field_set.interpolate(Sheng::DataSet.new(item))
         end
         @start_node.remove
         @end_node.remove
-        xml.remove
+        @xml_fragment.remove
       end
+    rescue Sheng::DataSet::KeyNotFound
+      nil
     end
 
     def is_table_row?
@@ -34,13 +37,19 @@ module Sheng
       next_node, end_node = start_node, nil
       while !end_node
         next_node = next_node.next_element
-        if next_node.search(".//w:fldSimple[contains(@w:instr, 'end_#{key}')]").present?
+        if next_node.search(".//w:fldSimple[contains(@w:instr, 'end:#{key}')]").present?
           end_node = next_node
         else
           node_set << next_node
         end
       end
       [start_node, node_set, end_node]
+    end
+
+    def dup_node_set
+      @xml_fragment.each_with_object(Nokogiri::XML::NodeSet.new(xml)) do |child, dup_content|
+        dup_content << child.dup
+      end
     end
   end
 end

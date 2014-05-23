@@ -17,7 +17,6 @@ require 'nokogiri'
 require 'fileutils'
 require 'sheng/helpers'
 require 'json'
-require 'pry'
 
 module Sheng
 end

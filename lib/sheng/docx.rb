@@ -43,6 +43,8 @@ module Sheng
       File.open(path, "w") { |f| f.write(buffer.string) }
     end
 
+  private
+
     def write_converted_zip_file_to_buffer(entry, buffer)
       contents = entry.get_input_stream.read
       buffer.put_next_entry(entry.name)
@@ -54,8 +56,6 @@ module Sheng
         buffer.write contents
       end
     end
-
-    private
 
     def is_wml_file?(file_name)
       WMLFileNamePatterns.any? { |regex| file_name.match(regex) }

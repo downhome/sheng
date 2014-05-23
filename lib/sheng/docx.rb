@@ -1,5 +1,5 @@
 #
-# Sheng::Docx - is a base Mediator whitch delegates responsibilities
+# Sheng::Docx - is a base Mediator which delegates responsibilities
 # to another sheng singleton classes, which replace their part of xml.
 #
 module Sheng

@@ -39,7 +39,7 @@ describe Sheng::Docx do
       end
     end
 
-    it "should raise an error when one ore more mergefields isn't merged" do
+    it "should raise an error when one or more mergefields isn't merged" do
       incomplete_hash = JSON.parse(File.read(fixture_path("inputs/incomplete.json")))
       doc = Sheng::Docx.new(input_file, incomplete_hash)
       expect {

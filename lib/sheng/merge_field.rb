@@ -1,7 +1,7 @@
 class Sheng::MergeField
   attr_reader :element, :xml
 
-  def initialize(element = nil)
+  def initialize(element)
     @element = element
     @xml = element.document
   end

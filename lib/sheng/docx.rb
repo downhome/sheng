@@ -13,7 +13,7 @@ module Sheng
 
     def initialize(input_file_path, params)
       @input_zip_file = Zip::File.new(input_file_path)
-      @data_set = Sheng::DataSet.new(params)
+      @data_set = DataSet.new(params)
     rescue Zip::ZipError => e
       raise ArgumentError.new(e.message)
     end

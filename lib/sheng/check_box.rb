@@ -14,7 +14,7 @@ module Sheng
       value = data_set.fetch(key)
       checked_attribute = @element.search('.//w:default').first.attribute('val')
       checked_attribute.value = value_is_truthy?(value) ? '1' : '0'
-    rescue Sheng::DataSet::KeyNotFound
+    rescue DataSet::KeyNotFound
       nil
     end
 

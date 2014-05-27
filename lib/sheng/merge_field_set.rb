@@ -34,7 +34,7 @@ module Sheng
               end
               next
             elsif node.raw_key =~ /^start:/
-              node = Sheng::Sequence.new(node)
+              node = Sequence.new(node)
               current_sequence_key = node.key
             end
           end

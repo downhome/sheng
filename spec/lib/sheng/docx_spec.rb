@@ -38,7 +38,7 @@ describe Sheng::Docx do
 
     it "should raise an error when one or more mergefields isn't merged" do
       incomplete_hash = JSON.parse(File.read(fixture_path("inputs/incomplete.json")))
-      doc = Sheng::Docx.new(input_file, incomplete_hash)
+      doc = described_class.new(input_file, incomplete_hash)
       expect {
         doc.generate(output_file)
       }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError)
@@ -51,7 +51,7 @@ describe Sheng::Docx do
     ]
     bad_documents.each do |doc_path|
       it "should raise an error when bad document #{doc_path} supplied" do
-        doc = Sheng::Docx.new(fixture_path("bad_docx_files/#{doc_path}"), input_hash)
+        doc = described_class.new(fixture_path("bad_docx_files/#{doc_path}"), input_hash)
         expect {
           doc.generate(output_file)
         }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError)
@@ -60,7 +60,7 @@ describe Sheng::Docx do
 
     it 'should raise an error if document has bad (old) mergefields' do
       old_document = fixture_path("bad_docx_files/with_old_mergefields.docx")
-      doc = Sheng::Docx.new(old_document, input_hash)
+      doc = described_class.new(old_document, input_hash)
       expect {
         doc.generate(output_file)
       }.to raise_error(Sheng::WMLFile::InvalidWML)
@@ -71,14 +71,14 @@ describe Sheng::Docx do
     it "should raise an error if zip file not found" do
       allow(Zip::File).to receive(:new).with('crazy_path').and_raise(Zip::ZipError)
       expect {
-        Sheng::Docx.new('crazy_path', {})
+        described_class.new('crazy_path', {})
       }.to raise_error(ArgumentError)
     end
 
     it "should raise an ArgumentError if params is not a hash" do
       allow(Sheng::DataSet).to receive(:new).with(:not_a_hash).and_raise(ArgumentError)
       expect {
-        Sheng::Docx.new(input_file, :not_a_hash)
+        described_class.new(input_file, :not_a_hash)
       }.to raise_error(ArgumentError)
     end
   end

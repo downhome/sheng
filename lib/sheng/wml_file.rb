@@ -7,9 +7,10 @@ module Sheng
       end
     end
 
-    attr_reader :xml
+    attr_reader :xml, :filename
 
-    def initialize(xml)
+    def initialize(filename, xml)
+      @filename = filename
       @xml = Nokogiri::XML(xml)
     end
 
@@ -32,6 +33,10 @@ module Sheng
 
     def parent_set
       @parent_set ||= MergeFieldSet.new('main', xml)
+    end
+
+    def required_hash
+      parent_set.required_hash
     end
 
     def to_tree

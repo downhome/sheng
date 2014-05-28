@@ -27,4 +27,45 @@ describe Sheng::MergeFieldSet do
       expect(subject.xml_fragment).to be_equivalent_to xml_fragment('output/merge_field_set')
     end
   end
+
+  describe '#to_tree' do
+    it 'returns array of nodes for set, with nested sequences' do
+      expect(subject.to_tree).to eq tree_fixture('merge_field_set')
+    end
+
+    it 'returns proper tree with embedded sequence' do
+      subject = described_class.new('key', xml_fragment('input/embedded_sequence'))
+      expect(subject.to_tree).to eq tree_fixture('embedded_sequence')
+    end
+
+    it 'throws exception if sequence missing end tag' do
+      subject = described_class.new('key', xml_fragment('input/bad_sequences/no_end'))
+      expect {
+        subject.to_tree
+      }.to raise_error(Sheng::Sequence::MissingEndTag, "no end tag for sequence: library.books")
+    end
+
+    it 'throws exception if sequence nesting is wrong' do
+      subject = described_class.new('key', xml_fragment('input/bad_sequences/poorly_nested'))
+      expect {
+        subject.to_tree
+      }.to raise_error(Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals")
+    end
+  end
+
+  describe '#required_hash' do
+    it 'returns skeleton hash demonstrating required data for interpolation' do
+      expect(subject.required_hash).to eq({
+        "person" => { "first_name" => nil, "last_name" => nil, "socks" => [{"color"=>nil, "size"=>nil}] },
+        "veggies"=> { "green" => { "spinach" => nil } }
+      })
+    end
+
+    it 'uses given value as placeholder for mergefields/checkboxes' do
+      expect(subject.required_hash(:foo)).to eq({
+        "person" => { "first_name" => :foo, "last_name" => :foo, "socks" => [{"color"=>:foo, "size"=>:foo}] },
+        "veggies"=> { "green" => { "spinach" => :foo } }
+      })
+    end
+  end
 end

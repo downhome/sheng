@@ -18,15 +18,20 @@ module Sheng
       raise ArgumentError.new(e.message)
     end
 
-    def to_tree
-      @input_zip_file.entries.map do |entry|
+    def wml_files
+      @wml_files ||= @input_zip_file.entries.map do |entry|
         if is_wml_file?(entry.name)
-          {
-            :file => entry.name,
-            :tree => WMLFile.new(entry.get_input_stream.read).to_tree
-          }
+          WMLFile.new(entry.name, entry.get_input_stream)
         end
       end.compact
+    end
+
+    def to_tree
+      wml_files.map { |wml| { :file => wml.filename, :tree => wml.to_tree } }
+    end
+
+    def required_hash
+      wml_files.inject({}) { |memo, wml| memo.deep_merge(wml.required_hash) }
     end
 
     def generate path
@@ -49,9 +54,9 @@ module Sheng
       contents = entry.get_input_stream.read
       buffer.put_next_entry(entry.name)
       if is_wml_file?(entry.name)
-        wml_file = WMLFile.new(contents)
+        wml_file = WMLFile.new(entry.name, contents)
         wml_file.validate!
-        buffer.write WMLFile.new(contents).interpolate(@data_set)
+        buffer.write wml_file.interpolate(@data_set)
       else
         buffer.write contents
       end

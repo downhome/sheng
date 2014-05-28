@@ -84,4 +84,40 @@ describe Sheng::Docx do
       }.to raise_error(ArgumentError)
     end
   end
+
+  context 'with fake document' do
+    let(:zip_double) {
+      entry1 = double(Zip::Entry, :name => 'word/document.xml', :get_input_stream => :document)
+      entry2 = double(Zip::Entry, :name => 'word/footer2.xml', :get_input_stream => :footer2)
+      entry3 = double(Zip::Entry, :name => 'not_wml.xml', :get_input_stream => :not_wml)
+
+      double(Zip::File, :entries => [entry1, entry2, entry3])
+    }
+    subject { described_class.new('a_fake_file.docx', {}) }
+
+    before(:each) do
+      allow(Sheng::WMLFile).to receive(:new).with('word/document.xml', :document).
+        and_return(double(:filename => 'word/document.xml', :to_tree => :document_tree, :required_hash => { :a => { :b => 1 } }))
+      allow(Sheng::WMLFile).to receive(:new).with('word/footer2.xml', :footer2).
+        and_return(double(:filename => 'word/footer2.xml', :to_tree => :footer2_tree, :required_hash => { :a => { :c => 2 } }))
+      allow(Zip::File).to receive(:new).with('a_fake_file.docx').and_return(zip_double)
+    end
+
+    describe '#to_tree' do
+      it "returns trees for every WML file in document" do
+        expect(subject.to_tree).to eq([
+          { :file => 'word/document.xml', :tree => :document_tree },
+          { :file => 'word/footer2.xml', :tree => :footer2_tree }
+        ])
+      end
+    end
+
+    describe '#required_hash' do
+      it "returns deep merged #required_hash values from all WML files" do
+        expect(subject.required_hash).to eq({
+          :a => { :b => 1, :c => 2 }
+        })
+      end
+    end
+  end
 end

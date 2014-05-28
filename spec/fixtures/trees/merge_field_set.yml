@@ -1,0 +1,16 @@
+---
+- :type: merge_field
+  :key: person.first_name
+- :type: merge_field
+  :key: person.last_name
+- :type: sequence
+  :key: person.socks
+  :nodes:
+  - :type: merge_field
+    :key: color
+  - :type: merge_field
+    :key: size
+- :type: check_box
+  :key: veggies.green.spinach
+- :type: merge_field
+  :key: person.first_name

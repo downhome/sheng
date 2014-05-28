@@ -1,0 +1,13 @@
+---
+- :type: sequence
+  :key: library.books
+  :nodes:
+  - :type: merge_field
+    :key: title
+  - :type: sequence
+    :key: pages
+    :nodes:
+    - :type: merge_field
+      :key: size
+  - :type: merge_field
+    :key: scent

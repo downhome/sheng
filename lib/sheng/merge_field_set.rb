@@ -32,11 +32,11 @@ module Sheng
         basic_nodes.map do |node|
           if node.is_a? MergeField
             if current_sequence_key
-              if node.raw_key =~ /^end:/ && node.key == current_sequence_key
+              if node.is_end? && node.key == current_sequence_key
                 current_sequence_key = nil
               end
               next
-            elsif node.raw_key =~ /^start:/
+            elsif node.is_start?
               node = Sequence.new(node)
               current_sequence_key = node.key
             end

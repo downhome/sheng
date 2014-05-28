@@ -15,6 +15,14 @@ module Sheng
       raw_key = @element['w:instr'].gsub("MERGEFIELD", "").gsub("\\* MERGEFORMAT", "").strip
     end
 
+    def is_start?
+      raw_key =~ /^start:/
+    end
+
+    def is_end?
+      raw_key =~ /^end:/
+    end
+
     def interpolate(data_set)
       value = data_set.fetch(key)
       @element.replace(new_text_run_node(value))

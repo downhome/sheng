@@ -53,7 +53,7 @@ module Sheng
       bad_fields = xml.xpath('//w:instrText')
       bad_fields.each do |bad_field|
         unless bad_field.text =~ /FORMCHECKBOX/
-          @errors << "Bad mergefield: #{bad_field.text}"
+          @errors << "Old-style mergefield: #{bad_field.text}"
         end
       end
     end

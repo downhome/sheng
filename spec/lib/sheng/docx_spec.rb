@@ -44,27 +44,29 @@ describe Sheng::Docx do
       }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError)
     end
 
-    bad_documents = [
-      'with_bad_table.docx',
-      'with_extra_field.docx',
-      'with_extra_sequence.docx'
-    ]
-    bad_documents.each do |doc_path|
-      it "should raise an error when bad document #{doc_path} supplied" do
-        doc = described_class.new(fixture_path("bad_docx_files/#{doc_path}"), input_hash)
+    shared_examples_for 'a bad document' do |filename, error, error_message = nil|
+      it "should raise #{error} when given #{filename}" do
+        doc = described_class.new(fixture_path("bad_docx_files/#{filename}"), input_hash)
         expect {
           doc.generate(output_file)
-        }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError)
+        }.to raise_error(error, error_message)
       end
     end
 
-    it 'should raise an error if document has bad (old) mergefields' do
-      old_document = fixture_path("bad_docx_files/with_old_mergefields.docx")
-      doc = described_class.new(old_document, input_hash)
-      expect {
-        doc.generate(output_file)
-      }.to raise_error(Sheng::WMLFile::InvalidWML)
-    end
+    it_should_behave_like 'a bad document', 'with_field_not_in_dataset.docx',
+      Sheng::WMLFile::MergefieldNotReplacedError
+
+    it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
+      Sheng::Sequence::MissingEndTag, "no end tag for sequence: owner_signature"
+
+    it_should_behave_like 'a bad document', 'with_old_mergefields.docx',
+      Sheng::WMLFile::InvalidWML
+
+    it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
+      Sheng::WMLFile::MergefieldNotReplacedError
+
+    it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
+      Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals"
   end
 
   describe '#new' do

@@ -1,5 +1,8 @@
 module Sheng
   class Sequence < MergeFieldSet
+    class MissingEndTag < StandardError; end
+    class ImproperNesting < StandardError; end
+
     def initialize(merge_field)
       @start_merge_field = merge_field
       @key = merge_field.key
@@ -35,15 +38,37 @@ module Sheng
       start_node = @start_merge_field.element.ancestors[traverse_up_degrees - 1]
       node_set = Nokogiri::XML::NodeSet.new(start_node.document)
       next_node, end_node = start_node, nil
+      embedded_sequences = [key]
       while !end_node
         next_node = next_node.next_element
-        if next_node.search(".//w:fldSimple[contains(@w:instr, 'end:#{key}')]").present?
+
+        if next_node.nil?
+          raise MissingEndTag, "no end tag for sequence: #{key}"
+        end
+
+        extract_mergefields(next_node).each do |mergefield|
+          if mergefield.is_start?
+            embedded_sequences.push mergefield.key
+          elsif mergefield.is_end?
+            if (last_sequence = embedded_sequences.pop) && last_sequence != mergefield.key
+              raise ImproperNesting, "expected end:#{last_sequence}, got end:#{mergefield.key}"
+            end
+          end
+        end
+
+        if embedded_sequences.empty?
           end_node = next_node
         else
           node_set << next_node
         end
       end
       [start_node, node_set, end_node]
+    end
+
+    def extract_mergefields(fragment)
+      fragment.xpath(".//#{mergefield_element_path}").map do |field_simple|
+        MergeField.new(field_simple)
+      end
     end
 
     def dup_node_set

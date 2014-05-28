@@ -50,4 +50,16 @@ describe Sheng::Sequence do
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/embedded_sequence')
     end
   end
+
+  describe '#new' do
+    it 'raises an exception if sequence has no end tag' do
+      dataset = Sheng::DataSet.new({})
+
+      xml = xml_fragment('input/bad_sequences/no_end')
+      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
+      expect {
+        subject = described_class.new(merge_field)
+      }.to raise_error(described_class::MissingEndTag, "no end tag for sequence: library.books")
+    end
+  end
 end

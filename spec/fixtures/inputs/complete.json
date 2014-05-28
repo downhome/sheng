@@ -38,5 +38,11 @@
       "first_name": "Sam",
       "last_name": "Fields"
     }
+  ],
+  "animals": [
+    { "color": "blue"}
+  ],
+  "birds": [
+    { "wingspan": "amazing"}
   ]
 }

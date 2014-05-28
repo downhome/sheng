@@ -19,6 +19,9 @@ module Sheng
       value = data_set.fetch(key)
       @element.replace(new_text_run_node(value))
     rescue DataSet::KeyNotFound
+      # Ignore this error; we'll collect all uninterpolated fields later and
+      # raise a new exception, so we can list all the fields in an error
+      # message.
       nil
     end
 

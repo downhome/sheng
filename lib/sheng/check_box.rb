@@ -15,6 +15,9 @@ module Sheng
       checked_attribute = @element.search('.//w:default').first.attribute('val')
       checked_attribute.value = value_is_truthy?(value) ? '1' : '0'
     rescue DataSet::KeyNotFound
+      # Ignore this error; we'll collect all uninterpolated fields later and
+      # raise a new exception, so we can list all the fields in an error
+      # message.
       nil
     end
 

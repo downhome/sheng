@@ -23,6 +23,8 @@ module Sheng
       end
     end
 
+    # Returns an array of nodes for interpolation, which can be a mix of
+    # MergeField, CheckBox, and Sequence instances.
     def nodes
       @nodes ||= begin
         current_sequence_key = nil

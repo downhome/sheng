@@ -3,7 +3,7 @@ module Sheng
     def initialize(merge_field)
       @start_merge_field = merge_field
       @key = merge_field.key
-      @xml = merge_field.xml
+      @xml_document = merge_field.xml_document
       @start_node, @xml_fragment, @end_node = get_bounds_and_node_set
     end
 
@@ -17,7 +17,7 @@ module Sheng
         end
         @start_node.remove
         @end_node.remove
-        @xml_fragment.remove
+        xml_fragment.remove
       end
     rescue DataSet::KeyNotFound
       nil
@@ -47,7 +47,7 @@ module Sheng
     end
 
     def dup_node_set
-      @xml_fragment.each_with_object(Nokogiri::XML::NodeSet.new(xml)) do |child, dup_content|
+      xml_fragment.each_with_object(Nokogiri::XML::NodeSet.new(xml_document)) do |child, dup_content|
         dup_content << child.dup
       end
     end

@@ -16,7 +16,7 @@ module Sheng
     def interpolate(data_set)
       parent_set.interpolate(data_set)
       check_for_full_interpolation!
-      parent_set.xml.to_s
+      parent_set.xml_fragment.to_s
     end
 
     def check_for_full_interpolation!

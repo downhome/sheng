@@ -1,10 +1,10 @@
 module Sheng
   class MergeField
-    attr_reader :element, :xml
+    attr_reader :element, :xml_document
 
     def initialize(element)
       @element = element
-      @xml = element.document
+      @xml_document = element.document
     end
 
     def key
@@ -34,8 +34,8 @@ module Sheng
     end
 
     def new_tag tag_name
-      tag = Nokogiri::XML::Node.new(tag_name, xml)
-      tag.namespace = xml.document.root.namespace_definitions.find { |ns| ns.prefix == "w" }
+      tag = Nokogiri::XML::Node.new(tag_name, xml_document)
+      tag.namespace = xml_document.root.namespace_definitions.find { |ns| ns.prefix == "w" }
       tag
     end
   end

@@ -14,11 +14,9 @@ describe Sheng::Sequence do
       merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
       subject = described_class.new(merge_field)
       subject.interpolate(dataset)
-      expect(subject.xml).to be_equivalent_to xml_fragment('output/sequence')
+      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence')
     end
-  end
 
-  describe '#interpolate' do
     it 'can handle table-based sequences with multiple rows' do
       dataset = Sheng::DataSet.new({
         :meals => [
@@ -31,7 +29,7 @@ describe Sheng::Sequence do
       merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
       subject = described_class.new(merge_field)
       subject.interpolate(dataset)
-      expect(subject.xml).to be_equivalent_to xml_fragment('output/table')
+      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/table')
     end
   end
 end

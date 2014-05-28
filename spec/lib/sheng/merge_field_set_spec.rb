@@ -24,7 +24,7 @@ describe Sheng::MergeFieldSet do
       })
 
       subject.interpolate(dataset)
-      expect(subject.xml).to be_equivalent_to xml_fragment('output/merge_field_set')
+      expect(subject.xml_fragment).to be_equivalent_to xml_fragment('output/merge_field_set')
     end
   end
 end

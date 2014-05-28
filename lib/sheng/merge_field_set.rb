@@ -1,10 +1,11 @@
 module Sheng
   class MergeFieldSet
-    attr_reader :xml, :key
+    attr_reader :xml_fragment, :xml_document, :key
 
-    def initialize(key, xml)
+    def initialize(key, xml_fragment)
       @key = key
-      @xml = xml
+      @xml_fragment = xml_fragment
+      @xml_document = xml_fragment.document
     end
 
     def interpolate(data_set)
@@ -56,7 +57,7 @@ module Sheng
     end
 
     def basic_node_elements
-      xml.xpath(".//#{mergefield_element_path}|.//#{checkbox_element_path}")
+      xml_fragment.xpath(".//#{mergefield_element_path}|.//#{checkbox_element_path}")
     end
 
     def mergefield_element_path

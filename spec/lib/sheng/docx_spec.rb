@@ -74,7 +74,7 @@ describe Sheng::Docx do
       allow(Zip::File).to receive(:new).with('crazy_path').and_raise(Zip::ZipError)
       expect {
         described_class.new('crazy_path', {})
-      }.to raise_error(ArgumentError)
+      }.to raise_error(described_class::InvalidFile, "Zip::ZipError")
     end
 
     it "should raise an ArgumentError if params is not a hash" do

@@ -4,6 +4,8 @@
 #
 module Sheng
   class Docx
+    class InvalidFile < StandardError; end
+
     WMLFileNamePatterns = [
       /word\/document.xml/,
       /word\/numbering.xml/,
@@ -15,7 +17,7 @@ module Sheng
       @input_zip_file = Zip::File.new(input_file_path)
       @data_set = DataSet.new(params)
     rescue Zip::ZipError => e
-      raise ArgumentError.new(e.message)
+      raise InvalidFile.new(e.message)
     end
 
     def wml_files

@@ -31,5 +31,23 @@ describe Sheng::Sequence do
       subject.interpolate(dataset)
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/table')
     end
+
+    it 'can handle embedded sequences' do
+      dataset = Sheng::DataSet.new({
+        :library => {
+          :books => [
+            { :title => 'A Radish Summer', :scent => 'totally rad', :pages => [{ :size => 'huge'}, { :size => 'tiny'}] },
+            { :title => 'Elephants Are Not Your Friend', :scent => 'stinky', :pages => [{ :size => 'gigantic'}] }
+          ]
+        }
+      })
+
+      xml = xml_fragment('input/embedded_sequence')
+      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
+      subject = described_class.new(merge_field)
+
+      subject.interpolate(dataset)
+      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/embedded_sequence')
+    end
   end
 end

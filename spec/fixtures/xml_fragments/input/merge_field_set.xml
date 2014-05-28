@@ -73,4 +73,17 @@
       <w:default w:val="0"/>
     </w:checkBox>
   </w:ffData>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">First Name Again: </w:t>
+    </w:r>
+    <w:fldSimple w:instr=" MERGEFIELD  person.first_name \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«person.first_name»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
 </w:document>

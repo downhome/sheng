@@ -21,9 +21,9 @@ module Sheng
     end
 
     def check_for_full_interpolation!
-      mergefield_path = "//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]"
+      mergefield_path = "//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]|.//w:instrText[ contains(., 'MERGEFIELD') ]"
       unmerged_fields = xml.xpath(mergefield_path).each_with_object([]) do |element, fields|
-        fields << element['w:instr'].gsub("MERGEFIELD", "").gsub("\\* MERGEFORMAT", "").strip
+        fields << MergeField.new(element).raw_key#element['w:instr'].gsub("MERGEFIELD", "").gsub("\\* MERGEFORMAT", "").strip
       end.uniq
 
       unless unmerged_fields.empty?

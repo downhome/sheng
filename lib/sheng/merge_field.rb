@@ -12,7 +12,12 @@ module Sheng
     end
 
     def raw_key
-      raw_key = @element['w:instr'].gsub("MERGEFIELD", "").gsub("\\* MERGEFORMAT", "").strip
+      if @element.name == 'instrText'
+        raw_key = @element.text
+      else
+        raw_key = @element['w:instr']
+      end
+      raw_key.gsub("MERGEFIELD", "").gsub("\\* MERGEFORMAT", "").strip
     end
 
     def is_start?

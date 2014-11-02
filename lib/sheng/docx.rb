@@ -57,8 +57,8 @@ module Sheng
       buffer.put_next_entry(entry.name)
       if is_wml_file?(entry.name)
         wml_file = WMLFile.new(entry.name, contents)
-        wml_file.validate! unless opts[:validate].to_s == 'false'
         buffer.write wml_file.interpolate(@data_set)
+        wml_file.validate! unless opts[:validate].to_s == 'false'
       else
         buffer.write contents
       end

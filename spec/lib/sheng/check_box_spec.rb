@@ -12,7 +12,7 @@ describe Sheng::CheckBox do
       ['true', 'TRuE', true, 1, '1', 'yes'].each do |truthy|
         given_key = truthy.is_a?(String) ? "'#{truthy}' (as string)" : truthy
         it "returns true if key is #{given_key} in dataset" do
-          expect(subject.value_is_truthy?(truthy)).to be_true
+          expect(subject.value_is_truthy?(truthy)).to be_truthy
         end
       end
     end
@@ -22,7 +22,7 @@ describe Sheng::CheckBox do
         given_key = falsy.is_a?(String) ? "'#{falsy}' (as string)" : falsy
         given_key = 'nil' if falsy.nil?
         it "returns false if key is #{given_key} in dataset" do
-          expect(subject.value_is_truthy?(falsy)).to be_false
+          expect(subject.value_is_truthy?(falsy)).to be_falsy
         end
       end
     end

@@ -67,6 +67,41 @@ describe Sheng::Docx do
 
     it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
       Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals"
+
+    context "with validate false" do
+      it "should not raise an error with a different style of mergefield if validate => false is passed in" do
+        subject.generate(output_file, :validate => false)
+        Zip::File.new(output_file).entries.each do |file|
+          if mutable_documents.include?(file.name)
+            Zip::File.open(output_file) do |zip|
+              xml = zip.read(file)
+              expect(Nokogiri::XML(xml).xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]")).to be_empty
+            end
+          end
+        end
+      end
+
+      shared_examples_for 'a bad document' do |filename, error, error_message = nil|
+        it "should raise #{error} when given #{filename}" do
+          doc = described_class.new(fixture_path("bad_docx_files/#{filename}"), input_hash)
+          expect {
+            doc.generate(output_file, :validate => false)
+          }.to raise_error(error, error_message)
+        end
+      end
+
+      it_should_behave_like 'a bad document', 'with_field_not_in_dataset.docx',
+        Sheng::WMLFile::MergefieldNotReplacedError
+
+      it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
+        Sheng::Sequence::MissingEndTag, "no end tag for sequence: owner_signature"
+
+      it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
+        Sheng::WMLFile::MergefieldNotReplacedError
+
+      it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
+        Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals"
+    end
   end
 
   describe '#new' do

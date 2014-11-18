@@ -1,6 +1,7 @@
 
 require 'active_support/inflector'
 require 'active_support/core_ext/hash'
+require 'elements/merge_field_path_helper'
 require 'sheng/version'
 require 'sheng/data_set'
 require 'sheng/docx'

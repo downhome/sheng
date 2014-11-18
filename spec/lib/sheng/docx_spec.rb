@@ -36,6 +36,21 @@ describe Sheng::Docx do
       end
     end
 
+    context 'old style mergefields' do
+      let(:input_file) { fixture_path('bad_docx_files/old_mergefield_output.docx') }
+      it 'should replace all old style mergefields' do
+        subject.generate(output_file)
+        Zip::File.new(output_file).entries.each do |file|
+          if mutable_documents.include?(file.name)
+            Zip::File.open(output_file) do |zip|
+              xml = zip.read(file)
+              expect(Nokogiri::XML(xml).xpath(".//w:instrText[ contains(., 'MERGEFIELD') ]")).to be_empty
+            end
+          end
+        end
+      end
+    end
+
     it "should raise an error when one or more mergefields isn't merged" do
       incomplete_hash = JSON.parse(File.read(fixture_path("inputs/incomplete.json")))
       doc = described_class.new(input_file, incomplete_hash)
@@ -58,9 +73,6 @@ describe Sheng::Docx do
 
     it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
       Sheng::Sequence::MissingEndTag, "no end tag for sequence: owner_signature"
-
-    it_should_behave_like 'a bad document', 'with_old_mergefields.docx',
-      Sheng::WMLFile::InvalidWML
 
     it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
       Sheng::WMLFile::MergefieldNotReplacedError

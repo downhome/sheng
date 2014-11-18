@@ -11,8 +11,16 @@ module Sheng
       raw_key.gsub(/^(start:|end:)/, '')
     end
 
+    def instr_text?
+      @element.name == 'instrText'
+    end
+
+    def fld_simple?
+
+    end
+
     def raw_key
-      if @element.name == 'instrText'
+      if instr_text?
         raw_key = @element.text
       else
         raw_key = @element['w:instr']

@@ -17,6 +17,20 @@ describe Sheng::Sequence do
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence')
     end
 
+    it 'works with simple arrays' do
+      dataset = Sheng::DataSet.new({
+        :my_dog => {
+          :favorite_toys => ["rooster", "wallet", "foot"]
+        }
+      })
+
+      xml = xml_fragment('input/array_sequence')
+      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
+      subject = described_class.new(merge_field)
+      subject.interpolate(dataset)
+      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/array_sequence')
+    end
+
     it 'can handle table-based sequences with multiple rows' do
       dataset = Sheng::DataSet.new({
         :meals => [

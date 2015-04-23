@@ -1,0 +1,23 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD start:perps | as(bad_guy) \* MERGEFORMAT ">
+      <w:r>
+        <w:t>«start:perps | as(bad_guy)»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD bad_guy \* MERGEFORMAT ">
+      <w:r>
+        <w:t>«bad_guy»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD end:perps \* MERGEFORMAT ">
+      <w:r>
+        <w:t>«end:perps»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+</w:document>

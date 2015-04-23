@@ -31,6 +31,18 @@ describe Sheng::Sequence do
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/array_sequence')
     end
 
+    it 'can override iteration variable' do
+      dataset = Sheng::DataSet.new({
+        :perps => ["Hamburglar", "Tony the Tiger"]
+      })
+
+      xml = xml_fragment('input/overridden_iterator_array_sequence')
+      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
+      subject = described_class.new(merge_field)
+      subject.interpolate(dataset)
+      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/overridden_iterator_array_sequence')
+    end
+
     it 'can handle table-based sequences with multiple rows' do
       dataset = Sheng::DataSet.new({
         :meals => [

@@ -16,7 +16,7 @@ module Sheng
         collection.each_with_index do |item, i|
           new_node_set = @start_node.add_previous_sibling(dup_node_set)
           merge_field_set = MergeFieldSet.new("#{key}_#{i}", new_node_set)
-          item = { :item => item } unless item.is_a?(Hash)
+          item = { @start_merge_field.iteration_variable => item } unless item.is_a?(Hash)
           merge_field_set.interpolate(DataSet.new(item))
         end
         @start_node.remove

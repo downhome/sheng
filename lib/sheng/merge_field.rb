@@ -12,7 +12,16 @@ module Sheng
     end
 
     def key
-      raw_key.gsub(/^(start:|end:)/, '')
+      raw_key.gsub(/^(start:|end:)|(\s+.*)/, '')
+    end
+
+    def filters
+      match = raw_key.match(/\|(.*)$/)
+      if match
+        match.captures[0].split("|").map(&:strip)
+      else
+        []
+      end
     end
 
     def raw_key
@@ -44,6 +53,14 @@ module Sheng
 
     def is_start?
       raw_key =~ /^start:/
+    end
+
+    def iteration_variable
+      if filters.detect { |f| f =~ /^as\((.*)\)/ }
+        $1.to_sym
+      else
+        :item
+      end
     end
 
     def is_end?

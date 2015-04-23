@@ -5,6 +5,12 @@
   "a_long_paragraph": "Pede erat feugiat ante, auctor facilisis dui augue non turpis. Suspendisse mattis metus et justo. Aliquam erat volutpat.  Suspendisse potenti. Nam hendrerit lorem commodo metus laoreet ullamcorper.  Proin vel nunc a felis sollicitudin pretium. Maecenas in metus at mi mollis posuere. Quisque ac quam sed massa adipiscing rutrum. Vestibulum ipsum.  Phasellus porta sapien. Maecenas venenatis tellus vel tellus.\n\n Aliquam aliquam dolor at justo. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Morbi pretium purus a magna. Nullam dui tellus, blandit eu, facilisis non, pharetra consectetuer, leo. Maecenas sit amet ante sagittis magna imperdiet pulvinar. Vestibulum a lacus at.",
   "check_me": "true",
   "leave_me_unchecked": "false",
+  "embedded": {
+    "first_level": "shallow",
+    "two_levels": {
+      "second_level": "deep"
+    }
+  },
   "meals": [
     {
       "meal": "sHrImP",

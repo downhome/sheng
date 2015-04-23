@@ -7,12 +7,28 @@ module Sheng
       @xml_document = element.document
     end
 
+    def new_style?
+      element.name == 'instrText'
+    end
+
     def key
       raw_key.gsub(/^(start:|end:)/, '')
     end
 
     def raw_key
-      raw_key = @element['w:instr'].gsub("MERGEFIELD", "").gsub("\\* MERGEFORMAT", "").strip
+      mergefield_instruction_text.gsub(/MERGEFIELD|\\\* MERGEFORMAT/, "").strip
+    end
+
+    def mergefield_instruction_text
+      return element['w:instr'] unless new_style?
+      current_element = element
+      label = current_element.text
+      loop do
+        current_element = current_element.parent.next_element.at_xpath('./w:instrText')
+        break unless current_element
+        label << current_element.text
+      end
+      label
     end
 
     def is_start?
@@ -23,9 +39,26 @@ module Sheng
       raw_key =~ /^end:/
     end
 
+    def replace_mergefield(value)
+      if !new_style?
+        element.replace(new_text_run_node(value))
+      else
+        nodeset = Nokogiri::XML::NodeSet.new(xml_document)
+        current_node = element.parent.previous_element
+        nodeset << current_node
+        loop do
+          current_node = current_node.next_element
+          nodeset << current_node
+          break if current_node.at_xpath("./w:fldChar[contains(@w:fldCharType, 'end')]")
+        end
+        nodeset.before(new_text_run_node(value))
+        nodeset.remove
+      end
+    end
+
     def interpolate(data_set)
       value = data_set.fetch(key)
-      @element.replace(new_text_run_node(value))
+      replace_mergefield(value)
     rescue DataSet::KeyNotFound
       # Ignore this error; we'll collect all uninterpolated fields later and
       # raise a new exception, so we can list all the fields in an error

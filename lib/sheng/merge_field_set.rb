@@ -69,7 +69,11 @@ module Sheng
     end
 
     def basic_node_elements
-      xml_fragment.xpath(".//#{mergefield_element_path}|.//#{checkbox_element_path}")
+      xml_fragment.xpath(".//#{mergefield_element_path}|.//#{new_mergefield_element_path}|.//#{checkbox_element_path}")
+    end
+
+    def new_mergefield_element_path
+      "w:instrText[text()[contains(., 'MERGEFIELD')]]"
     end
 
     def mergefield_element_path

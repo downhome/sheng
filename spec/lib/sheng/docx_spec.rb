@@ -1,7 +1,7 @@
 describe Sheng::Docx do
   let(:output_file) { "/tmp/sheng_output_document.docx" }
-  let(:expected_output_file) { fixture_path("output_document.docx") }
-  let(:input_file) { fixture_path("input_document.docx") }
+  let(:expected_output_file) { fixture_path("docx_files/output_document.docx") }
+  let(:input_file) { fixture_path("docx_files/input_document.docx") }
   let(:input_hash) { JSON.parse(File.read(fixture_path("inputs/complete.json"))) }
   let(:mutable_documents) {
     ['word/document.xml', 'word/numbering.xml', 'word/header1.xml']
@@ -24,6 +24,25 @@ describe Sheng::Docx do
       end
     end
 
+    describe "with older style mergefields" do
+      let(:expected_output_file) { fixture_path("docx_files/old_style/output_document.docx") }
+      let(:input_file) { fixture_path("docx_files/old_style/input_document.docx") }
+
+      it 'still works' do
+        subject.generate(output_file)
+        Zip::File.new(output_file).entries.each do |file|
+          if mutable_documents.include?(file.name)
+            Zip::File.open(output_file) do |zip|
+              gem_output_xml      = zip.read(file)
+              fixtures_output_xml = Zip::File.new(expected_output_file).read(file)
+
+              expect(gem_output_xml).to be_equivalent_to fixtures_output_xml
+            end
+          end
+        end
+      end
+    end
+
     it "should replace all mergefields when given all mergefield values" do
       subject.generate(output_file)
       Zip::File.new(output_file).entries.each do |file|
@@ -41,7 +60,7 @@ describe Sheng::Docx do
       doc = described_class.new(input_file, incomplete_hash)
       expect {
         doc.generate(output_file)
-      }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError)
+      }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError, "Mergefields not replaced: first_name, last_name")
     end
 
     shared_examples_for 'a bad document' do |filename, error, error_message = nil|
@@ -59,49 +78,11 @@ describe Sheng::Docx do
     it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
       Sheng::Sequence::MissingEndTag, "no end tag for sequence: owner_signature"
 
-    it_should_behave_like 'a bad document', 'with_old_mergefields.docx',
-      Sheng::WMLFile::InvalidWML
-
     it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
       Sheng::WMLFile::MergefieldNotReplacedError
 
     it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
       Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals"
-
-    context "with validate false" do
-      it "should not raise an error with a different style of mergefield if validate => false is passed in" do
-        subject.generate(output_file, :validate => false)
-        Zip::File.new(output_file).entries.each do |file|
-          if mutable_documents.include?(file.name)
-            Zip::File.open(output_file) do |zip|
-              xml = zip.read(file)
-              expect(Nokogiri::XML(xml).xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]")).to be_empty
-            end
-          end
-        end
-      end
-
-      shared_examples_for 'a bad document' do |filename, error, error_message = nil|
-        it "should raise #{error} when given #{filename}" do
-          doc = described_class.new(fixture_path("bad_docx_files/#{filename}"), input_hash)
-          expect {
-            doc.generate(output_file, :validate => false)
-          }.to raise_error(error, error_message)
-        end
-      end
-
-      it_should_behave_like 'a bad document', 'with_field_not_in_dataset.docx',
-        Sheng::WMLFile::MergefieldNotReplacedError
-
-      it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
-        Sheng::Sequence::MissingEndTag, "no end tag for sequence: owner_signature"
-
-      it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
-        Sheng::WMLFile::MergefieldNotReplacedError
-
-      it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
-        Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals"
-    end
   end
 
   describe '#new' do

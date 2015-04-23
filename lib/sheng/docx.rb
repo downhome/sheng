@@ -36,11 +36,11 @@ module Sheng
       wml_files.inject({}) { |memo, wml| memo.deep_merge(wml.required_hash) }
     end
 
-    def generate(path, opts = {})
+    def generate(path)
       buffer = Zip::OutputStream.write_buffer do |out|
         begin
           @input_zip_file.entries.each do |entry|
-            write_converted_zip_file_to_buffer(entry, out, opts)
+            write_converted_zip_file_to_buffer(entry, out)
           end
         ensure
           out.close_buffer
@@ -52,12 +52,11 @@ module Sheng
 
   private
 
-    def write_converted_zip_file_to_buffer(entry, buffer, opts = {})
+    def write_converted_zip_file_to_buffer(entry, buffer)
       contents = entry.get_input_stream.read
       buffer.put_next_entry(entry.name)
       if is_wml_file?(entry.name)
         wml_file = WMLFile.new(entry.name, contents)
-        wml_file.validate! unless opts[:validate].to_s == 'false'
         buffer.write wml_file.interpolate(@data_set)
       else
         buffer.write contents

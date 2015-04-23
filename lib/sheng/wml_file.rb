@@ -2,8 +2,9 @@ module Sheng
   class WMLFile
     class InvalidWML < StandardError; end
     class MergefieldNotReplacedError < StandardError
-      def initialize(field_names)
-        super("Mergefields not replaced: #{field_names.join(", ")}")
+      def initialize(unmerged_fields)
+        unmerged_keys = unmerged_fields.map(&:raw_key)
+        super("Mergefields not replaced: #{unmerged_keys.join(', ')}")
       end
     end
 
@@ -21,10 +22,10 @@ module Sheng
     end
 
     def check_for_full_interpolation!
-      mergefield_path = "//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]"
-      unmerged_fields = xml.xpath(mergefield_path).each_with_object([]) do |element, fields|
-        fields << element['w:instr'].gsub("MERGEFIELD", "").gsub("\\* MERGEFORMAT", "").strip
-      end.uniq
+      modified_parent_set = MergeFieldSet.new('main', xml)
+      unmerged_fields = modified_parent_set.basic_nodes.reject { |node|
+        node.is_a?(CheckBox)
+      }
 
       unless unmerged_fields.empty?
         raise MergefieldNotReplacedError.new(unmerged_fields)
@@ -41,21 +42,6 @@ module Sheng
 
     def to_tree
       parent_set.to_tree
-    end
-
-    def validate!
-      validate
-      raise InvalidWML.new(@errors.inspect) unless @errors.empty?
-    end
-
-    def validate
-      @errors = []
-      bad_fields = xml.xpath('//w:instrText')
-      bad_fields.each do |bad_field|
-        unless bad_field.text =~ /FORMCHECKBOX/
-          @errors << "Old-style mergefield: #{bad_field.text}"
-        end
-      end
     end
   end
 end

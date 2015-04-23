@@ -27,11 +27,20 @@ module Sheng
     end
 
     def is_table_row?
-      @start_merge_field.element.ancestors[2].name == 'tr'
+      if @start_merge_field.new_style?
+        @start_merge_field.element.ancestors[3].name == 'tr'
+      else
+        @start_merge_field.element.ancestors[2].name == 'tr'
+      end
     end
 
     def traverse_up_degrees
-      is_table_row? ? 3 : 1
+      degrees = is_table_row? ? 3 : 1
+      if @start_merge_field.new_style?
+        degrees + 1
+      else
+        degrees
+      end
     end
 
     def get_bounds_and_node_set
@@ -66,7 +75,7 @@ module Sheng
     end
 
     def extract_mergefields(fragment)
-      fragment.xpath(".//#{mergefield_element_path}").map do |field_simple|
+      fragment.xpath(".//#{mergefield_element_path}|.//#{new_mergefield_element_path}").map do |field_simple|
         MergeField.new(field_simple)
       end
     end

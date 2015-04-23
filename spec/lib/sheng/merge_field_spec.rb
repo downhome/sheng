@@ -5,6 +5,36 @@ describe Sheng::MergeField do
     described_class.new(element)
   }
 
+  describe "new style merge field" do
+    subject {
+      fragment = xml_fragment('input/new_merge_field')
+      element = fragment.xpath("//w:instrText").first
+      described_class.new(element)
+    }
+
+    describe '#interpolate' do
+      it 'interpolates values from dataset into mergefield' do
+        dataset = Sheng::DataSet.new({
+          :ocean => { :fishy => "scrumblefish" }
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field')
+      end
+    end
+  end
+
+  describe '#interpolate' do
+    it 'interpolates values from dataset into mergefield' do
+      dataset = Sheng::DataSet.new({
+        :ocean => { :fishy => "scrumblefish" }
+      })
+
+      subject.interpolate(dataset)
+      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field')
+    end
+  end
+
   describe '#raw_key' do
     it 'returns the mergefield name from the element' do
       expect(subject.raw_key).to eq 'ocean.fishy'

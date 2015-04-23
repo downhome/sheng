@@ -59,6 +59,9 @@
       <w:tc>
         <w:p>
           <w:r>
+            <w:rPr>
+              <w:noProof/>
+            </w:rPr>
             <w:t>Steamed Water</w:t>
           </w:r>
         </w:p>
@@ -99,6 +102,9 @@
       <w:tc>
         <w:p>
           <w:r>
+            <w:rPr>
+              <w:noProof/>
+            </w:rPr>
             <w:t>The Memory of Soda</w:t>
           </w:r>
         </w:p>

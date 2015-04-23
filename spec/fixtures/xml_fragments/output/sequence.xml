@@ -6,6 +6,9 @@
   </w:p>
   <w:p>
     <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
       <w:t>totally rad</w:t>
     </w:r>
   </w:p>
@@ -16,6 +19,9 @@
   </w:p>
   <w:p>
     <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
       <w:t>stinky</w:t>
     </w:r>
   </w:p>

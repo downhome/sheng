@@ -55,9 +55,6 @@
         <w:p>
           <w:fldSimple w:instr=" MERGEFIELD meal \* MERGEFORMAT ">
             <w:r w:rsidR="00623574">
-              <w:rPr>
-                <w:noProof/>
-              </w:rPr>
               <w:t>«meal»</w:t>
             </w:r>
           </w:fldSimple>
@@ -69,9 +66,6 @@
         <w:p>
           <w:fldSimple w:instr=" MERGEFIELD appetizer \* MERGEFORMAT ">
             <w:r w:rsidR="00623574">
-              <w:rPr>
-                <w:noProof/>
-              </w:rPr>
               <w:t>«appetizer»</w:t>
             </w:r>
           </w:fldSimple>
@@ -81,9 +75,6 @@
         <w:p>
           <w:fldSimple w:instr=" MERGEFIELD dessert \* MERGEFORMAT ">
             <w:r w:rsidR="00623574">
-              <w:rPr>
-                <w:noProof/>
-              </w:rPr>
               <w:t>«dessert»</w:t>
             </w:r>
           </w:fldSimple>

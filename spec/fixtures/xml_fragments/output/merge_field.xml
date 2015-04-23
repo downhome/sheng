@@ -1,5 +1,10 @@
 <w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
   <w:r>
+    <w:rPr>
+      <w:b/>
+      <w:i/>
+      <w:noProof/>
+    </w:rPr>
     <w:t>scrumblefish</w:t>
   </w:r>
 </w:document>

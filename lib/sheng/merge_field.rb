@@ -31,6 +31,17 @@ module Sheng
       label
     end
 
+    def styling_paragraph
+      if new_style?
+        separator_field = element.ancestors[1].at_xpath(".//w:fldChar[contains(@w:fldCharType, 'separate')]")
+        if separator_field
+          separator_field.parent.next_element.at_xpath(".//w:rPr")
+        end
+      else
+        element.at_xpath(".//w:rPr")
+      end
+    end
+
     def is_start?
       raw_key =~ /^start:/
     end
@@ -68,6 +79,9 @@ module Sheng
 
     def new_text_run_node value
       r_tag = new_tag('r')
+      if styling_paragraph
+        r_tag.add_child(styling_paragraph)
+      end
       t_tag = new_tag('t')
       t_tag.content = value
       r_tag.add_child(t_tag)

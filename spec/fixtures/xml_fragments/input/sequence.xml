@@ -12,9 +12,6 @@
   <w:p>
     <w:fldSimple w:instr=" MERGEFIELD title \* MERGEFORMAT ">
       <w:r>
-        <w:rPr>
-          <w:noProof/>
-        </w:rPr>
         <w:t>«title»</w:t>
       </w:r>
     </w:fldSimple>

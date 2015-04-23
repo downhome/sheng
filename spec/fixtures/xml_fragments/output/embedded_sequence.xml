@@ -7,17 +7,26 @@
   <w:p>
     <w:p>
       <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
         <w:t>huge</w:t>
       </w:r>
     </w:p>
     <w:p>
       <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
         <w:t>tiny</w:t>
       </w:r>
     </w:p>
   </w:p>
   <w:p>
     <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
       <w:t>totally rad</w:t>
     </w:r>
   </w:p>
@@ -29,12 +38,18 @@
   <w:p>
     <w:p>
       <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
         <w:t>gigantic</w:t>
       </w:r>
     </w:p>
   </w:p>
   <w:p>
     <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
       <w:t>stinky</w:t>
     </w:r>
   </w:p>

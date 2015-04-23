@@ -12,9 +12,6 @@
   <w:p>
     <w:fldSimple w:instr=" MERGEFIELD title \* MERGEFORMAT ">
       <w:r>
-        <w:rPr>
-          <w:noProof/>
-        </w:rPr>
         <w:t>«title»</w:t>
       </w:r>
     </w:fldSimple>
@@ -23,9 +20,6 @@
     <w:p>
       <w:fldSimple w:instr=" MERGEFIELD start:pages \* MERGEFORMAT ">
         <w:r w:rsidR="00455C8A">
-          <w:rPr>
-            <w:noProof/>
-          </w:rPr>
           <w:t>«start:pages»</w:t>
         </w:r>
       </w:fldSimple>

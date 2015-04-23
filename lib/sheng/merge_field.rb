@@ -1,5 +1,7 @@
 module Sheng
   class MergeField
+    AllowedFilters = [:upcase, :downcase, :capitalize, :titleize, :reverse]
+
     attr_reader :element, :xml_document
 
     def initialize(element)
@@ -86,12 +88,22 @@ module Sheng
 
     def interpolate(data_set)
       value = data_set.fetch(key)
-      replace_mergefield(value)
+      replace_mergefield(filter_value(value))
     rescue DataSet::KeyNotFound
       # Ignore this error; we'll collect all uninterpolated fields later and
       # raise a new exception, so we can list all the fields in an error
       # message.
       nil
+    end
+
+    def filter_value(value)
+      filters.inject(value) { |val, filter|
+        if AllowedFilters.include?(filter.to_sym)
+          val.send(filter)
+        else
+          val
+        end
+      }
     end
 
     def new_text_run_node value

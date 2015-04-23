@@ -15,12 +15,12 @@
       <w:tab/>
       <w:t xml:space="preserve">Last Name: </w:t>
     </w:r>
-    <w:fldSimple w:instr=" MERGEFIELD person.last_name \* MERGEFORMAT ">
+    <w:fldSimple w:instr=" MERGEFIELD person.last_name | upcase \* MERGEFORMAT ">
       <w:r>
         <w:rPr>
           <w:noProof/>
         </w:rPr>
-        <w:t>«person.last_name»</w:t>
+        <w:t>«person.last_name | upcase»</w:t>
       </w:r>
     </w:fldSimple>
   </w:p>

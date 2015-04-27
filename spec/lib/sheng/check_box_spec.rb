@@ -56,5 +56,18 @@ describe Sheng::CheckBox do
       default_checked.interpolate(dataset)
       expect(default_checked.element).to be_equivalent_to fragment_with_unchecked_box(default_checked.element)
     end
+
+    it "does not check the checkbox if key is not found in dataset" do
+      dataset = Sheng::DataSet.new({})
+      subject.interpolate(dataset)
+      expect(subject.element).to be_equivalent_to fragment_with_unchecked_box(subject.element)
+    end
+
+    it "does not uncheck a checked checkbox if key is not found in dataset" do
+      dataset = Sheng::DataSet.new({})
+      default_checked = described_class.new(fragment_with_checked_box(subject.element))
+      default_checked.interpolate(dataset)
+      expect(default_checked.element).to be_equivalent_to xml_fragment('output/check_box')
+    end
   end
 end

@@ -17,6 +17,15 @@ describe Sheng::Sequence do
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence')
     end
 
+    it 'does nothing if key not found in dataset' do
+      dataset = Sheng::DataSet.new({})
+
+      xml = xml_fragment('input/sequence')
+      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
+      subject = described_class.new(merge_field)
+      expect(subject.xml_document).to be_equivalent_to xml
+    end
+
     it 'works with simple arrays' do
       dataset = Sheng::DataSet.new({
         :my_dog => {

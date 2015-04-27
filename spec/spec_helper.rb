@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'sheng'
 require 'equivalent-xml'
 require 'equivalent-xml/rspec_matchers'

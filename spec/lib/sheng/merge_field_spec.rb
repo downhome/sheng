@@ -1,16 +1,11 @@
 describe Sheng::MergeField do
-  subject {
-    fragment = xml_fragment('input/merge_field')
-    element = fragment.xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]").first
-    described_class.new(element)
-  }
+  let(:fragment) { xml_fragment('input/merge_field') }
+  let(:element) { fragment.xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]").first }
+  subject { described_class.new(element) }
 
   describe "new style merge field" do
-    subject {
-      fragment = xml_fragment('input/new_merge_field')
-      element = fragment.xpath("//w:instrText").first
-      described_class.new(element)
-    }
+    let(:fragment) { xml_fragment('input/new_merge_field') }
+    let(:element) { fragment.xpath("//w:instrText").first }
 
     describe '#interpolate' do
       it 'interpolates values from dataset into mergefield' do
@@ -21,6 +16,33 @@ describe Sheng::MergeField do
         allow(subject).to receive(:filter_value).with("scrumblefish").and_return("l33tphish")
         subject.interpolate(dataset)
         expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field')
+      end
+    end
+
+    describe "with split mergefield instruction text runs" do
+      let(:fragment) { xml_fragment('input/split_merge_field') }
+
+      describe '#interpolate' do
+        it 'works' do
+          dataset = Sheng::DataSet.new({
+            :persimmon_face => "Lavender"
+          })
+
+          subject.interpolate(dataset)
+          expect(subject.xml_document).to be_equivalent_to xml_fragment('output/split_merge_field')
+        end
+      end
+    end
+
+    describe "with badly formed mergefield tags" do
+      let(:fragment) { xml_fragment('input/bad_merge_field') }
+
+      describe "#interpolate" do
+        it "raises an exception" do
+          expect {
+            subject.interpolate({})
+          }.to raise_error(described_class::BadMergefieldError, "MERGEFIELD  this_has_a_beginning_but_no_")
+        end
       end
     end
   end

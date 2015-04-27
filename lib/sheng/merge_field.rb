@@ -1,6 +1,9 @@
 module Sheng
   class MergeField
     AllowedFilters = [:upcase, :downcase, :capitalize, :titleize, :reverse]
+    InstructionTextRegex = /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/
+
+    class BadMergefieldError < StandardError; end
 
     attr_reader :element, :xml_document
 
@@ -27,18 +30,21 @@ module Sheng
     end
 
     def raw_key
-      mergefield_instruction_text.gsub(/MERGEFIELD|\\\* MERGEFORMAT/, "").strip
+      @raw_key ||= mergefield_instruction_text.gsub(InstructionTextRegex, '\1').strip
     end
 
     def mergefield_instruction_text
       return element['w:instr'] unless new_style?
-      current_element = element
-      label = current_element.text
+      label = element.text
+      current_element = element.parent
       loop do
-        current_element = current_element.parent.next_element.at_xpath('./w:instrText')
-        break unless current_element
-        label << current_element.text
+        current_element = current_element.next_element
+        next if ["bookmarkStart", "bookmarkEnd"].include?(current_element.name)
+        label_part = current_element.at_xpath(".//w:instrText")
+        break unless label_part
+        label << label_part.text
       end
+      raise BadMergefieldError.new(label) unless label.match(InstructionTextRegex)
       label
     end
 

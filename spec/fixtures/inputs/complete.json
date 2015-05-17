@@ -50,5 +50,12 @@
   ],
   "birds": [
     { "wingspan": "amazing"}
-  ]
+  ],
+  "exceptions": [],
+  "grocery_list": [
+    { "quantity": 4, "product": "bananas" },
+    { "quantity": "3 cups", "product": "sugar" }
+  ],
+  "invitees": ["Brad", "Ulisha", "Marcionette"],
+  "potluck_dishes": ["Salad", "Croutons", "Dressing", "Radishes"]
 }

@@ -1,0 +1,19 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:r>
+    <w:t>What we gots?</w:t>
+  </w:r>
+  <w:r>
+    <w:rPr>
+      <w:b/>
+      <w:i/>
+      <w:noProof/>
+    </w:rPr>
+    <w:t xml:space="preserve">Oh phew, alicorns. They are </w:t>
+  </w:r>
+   <w:r>
+     <w:rPr>
+       <w:noProof/>
+     </w:rPr>
+     <w:t>so tasties</w:t>
+   </w:r>
+</w:document>

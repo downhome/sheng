@@ -1,0 +1,52 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:tbl>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Name</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Favorite Megaphone</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Mr. Humanface</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>NoMoreQuiets</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Lady Notdog</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>iNoise</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+  </w:tbl>
+</w:document>

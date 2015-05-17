@@ -41,20 +41,20 @@ module Sheng
     end
 
     # Returns an array of nodes for interpolation, which can be a mix of
-    # MergeField, CheckBox, and Sequence instances.
+    # MergeField, CheckBox, ConditionalBlock, and Sequence instances.
     def nodes
       @nodes ||= begin
-        current_sequence_key = nil
+        current_block_key = nil
         basic_nodes.map do |node|
           if node.is_a? MergeField
-            if current_sequence_key
-              if node.is_end? && node.key == current_sequence_key
-                current_sequence_key = nil
+            if current_block_key
+              if node.is_end? && node.key == current_block_key
+                current_block_key = nil
               end
               next
             elsif node.is_start?
-              node = Sequence.new(node)
-              current_sequence_key = node.key
+              node = node.block_type.new(node)
+              current_block_key = node.key
             end
           end
           node

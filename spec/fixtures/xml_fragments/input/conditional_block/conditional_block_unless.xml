@@ -1,0 +1,51 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:r>
+    <w:t>What we don't gots?</w:t>
+  </w:r>
+  <w:p>
+    <w:r>
+      <w:fldChar w:fldCharType="begin"/>
+    </w:r>
+    <w:r>
+      <w:instrText xml:space="preserve">MERGEFIELD  unless:alicorns \* MERGEFORMAT </w:instrText>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="separate"/>
+    </w:r>
+    <w:r>
+      <w:t>«unless:alicorns»</w:t>
+    </w:r>
+    <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
+      <w:fldChar w:fldCharType="end"/>
+    </w:r>
+  </w:p>
+  <w:r>
+    <w:rPr>
+      <w:i/>
+    </w:rPr>
+    <w:t>No alicorns? SADFACES</w:t>
+  </w:r>
+  <w:p>
+    <w:r>
+      <w:fldChar w:fldCharType="begin"/>
+    </w:r>
+    <w:r>
+      <w:instrText xml:space="preserve">MERGEFIELD  end_unless:alicorns \* MERGEFORMAT </w:instrText>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="separate"/>
+    </w:r>
+    <w:r>
+      <w:t>«end_unless:alicorns»</w:t>
+    </w:r>
+    <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
+      <w:fldChar w:fldCharType="end"/>
+    </w:r>
+  </w:p>
+</w:document>

@@ -17,7 +17,7 @@ module Sheng
       raise KeyNotFound, "result at #{key} is a Hash"
     end
 
-    def fetch(key)
+    def fetch(key, **options)
       raise ArgumentError.new("must provide a string") unless key.is_a?(String)
       key_parts = key.split(/\./)
       current_result = raw_hash
@@ -26,7 +26,11 @@ module Sheng
         begin
           value = current_result.fetch(key_part.to_sym)
         rescue KeyError
-          raise KeyNotFound, "did not find in dataset: #{key} (#{key_part} not found)"
+          if options.has_key?(:default)
+            value = options[:default]
+          else
+            raise KeyNotFound, "did not find in dataset: #{key} (#{key_part} not found)"
+          end
         end
         if (i + 1) < key_parts.length
           raise_key_too_long(key, key_part) if !(value.is_a?(Hash))

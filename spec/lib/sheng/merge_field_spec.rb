@@ -123,6 +123,10 @@ describe Sheng::MergeField do
     it "returns true if mergefield is start of block" do
       allow(subject).to receive(:raw_key).and_return("start:whatever")
       expect(subject.is_start?).to be_truthy
+      allow(subject).to receive(:raw_key).and_return("if:whatever")
+      expect(subject.is_start?).to be_truthy
+      allow(subject).to receive(:raw_key).and_return("unless:whatever")
+      expect(subject.is_start?).to be_truthy
     end
 
     it "returns false if mergefield is end of block" do
@@ -139,6 +143,10 @@ describe Sheng::MergeField do
   describe "#is_end?" do
     it "returns true if mergefield is end of block" do
       allow(subject).to receive(:raw_key).and_return("end:whatever")
+      expect(subject.is_end?).to be_truthy
+      allow(subject).to receive(:raw_key).and_return("end_if:whatever")
+      expect(subject.is_end?).to be_truthy
+      allow(subject).to receive(:raw_key).and_return("end_unless:whatever")
       expect(subject.is_end?).to be_truthy
     end
 

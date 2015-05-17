@@ -2,7 +2,7 @@ module Sheng
   class MergeField
     AllowedFilters = [:upcase, :downcase, :capitalize, :titleize, :reverse]
     InstructionTextRegex = /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/
-    KeyRegex = /^(start:|end:)?\s*([^\|\s]+)\s*\|?(.*)?/
+    KeyRegex = /^(start:|end:|if:|end_if:|unless:|end_unless:)?\s*([^\|\s]+)\s*\|?(.*)?/
 
     class BadMergefieldError < StandardError; end
 
@@ -53,6 +53,15 @@ module Sheng
         end
       else
         element.at_xpath(".//w:rPr")
+      end
+    end
+
+    def block_type
+      return nil unless block_prefix
+      if ["start", "end"].include?(block_prefix)
+        Sequence
+      else
+        ConditionalBlock
       end
     end
 

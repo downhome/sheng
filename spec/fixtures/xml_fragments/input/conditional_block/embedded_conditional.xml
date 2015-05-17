@@ -1,0 +1,79 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:r>
+    <w:t>What are your hobbies?</w:t>
+  </w:r>
+  <w:p>
+    <w:r>
+      <w:fldChar w:fldCharType="begin"/>
+    </w:r>
+    <w:r>
+      <w:instrText xml:space="preserve">MERGEFIELD  if:alicorns \* MERGEFORMAT </w:instrText>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="separate"/>
+    </w:r>
+    <w:r>
+      <w:t>«if:alicorns»</w:t>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="end"/>
+    </w:r>
+  </w:p>
+  <w:r>
+    <w:t>Alicorns, of course, don't be silly.</w:t>
+  </w:r>
+  <w:p>
+    <w:r>
+      <w:fldChar w:fldCharType="begin"/>
+    </w:r>
+    <w:r>
+      <w:instrText xml:space="preserve">MERGEFIELD  if:scubas \* MERGEFORMAT </w:instrText>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="separate"/>
+    </w:r>
+    <w:r>
+      <w:t>«if:scubas»</w:t>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="end"/>
+    </w:r>
+  </w:p>
+  <w:r>
+    <w:t>...but also scubas!!</w:t>
+  </w:r>
+  <w:p>
+    <w:r>
+      <w:fldChar w:fldCharType="begin"/>
+    </w:r>
+    <w:r>
+      <w:instrText xml:space="preserve">MERGEFIELD  end_if:scubas \* MERGEFORMAT </w:instrText>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="separate"/>
+    </w:r>
+    <w:r>
+      <w:t>«end_if:scubas»</w:t>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="end"/>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:fldChar w:fldCharType="begin"/>
+    </w:r>
+    <w:r>
+      <w:instrText xml:space="preserve">MERGEFIELD  end_if:alicorns \* MERGEFORMAT </w:instrText>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="separate"/>
+    </w:r>
+    <w:r>
+      <w:t>«end_if:alicorns»</w:t>
+    </w:r>
+    <w:r>
+      <w:fldChar w:fldCharType="end"/>
+    </w:r>
+  </w:p>
+</w:document>

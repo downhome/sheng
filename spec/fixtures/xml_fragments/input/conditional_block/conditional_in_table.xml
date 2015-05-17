@@ -1,0 +1,176 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:tbl>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Name</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Favorite Megaphone</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:fldChar w:fldCharType="begin"/>
+          </w:r>
+          <w:r>
+            <w:instrText xml:space="preserve">MERGEFIELD  if:include_dogs \* MERGEFORMAT </w:instrText>
+          </w:r>
+          <w:r>
+            <w:fldChar w:fldCharType="separate"/>
+          </w:r>
+          <w:r>
+            <w:t>«if:include_dogs»</w:t>
+          </w:r>
+          <w:r>
+            <w:rPr>
+              <w:noProof/>
+            </w:rPr>
+            <w:fldChar w:fldCharType="end"/>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:fldChar w:fldCharType="begin"/>
+          </w:r>
+          <w:r>
+            <w:instrText xml:space="preserve">MERGEFIELD  start:dog_favorites \* MERGEFORMAT </w:instrText>
+          </w:r>
+          <w:r>
+            <w:fldChar w:fldCharType="separate"/>
+          </w:r>
+          <w:r>
+            <w:t>«start:dog_favorites»</w:t>
+          </w:r>
+          <w:r>
+            <w:rPr>
+              <w:noProof/>
+            </w:rPr>
+            <w:fldChar w:fldCharType="end"/>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD name \* MERGEFORMAT ">
+            <w:r w:rsidR="00623574">
+              <w:t>«name»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:fldSimple w:instr=" MERGEFIELD megaphone \* MERGEFORMAT ">
+            <w:r w:rsidR="00623574">
+              <w:t>«megaphone»</w:t>
+            </w:r>
+          </w:fldSimple>
+        </w:p>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:fldChar w:fldCharType="begin"/>
+          </w:r>
+          <w:r>
+            <w:instrText xml:space="preserve">MERGEFIELD  end:dog_favorites \* MERGEFORMAT </w:instrText>
+          </w:r>
+          <w:r>
+            <w:fldChar w:fldCharType="separate"/>
+          </w:r>
+          <w:r>
+            <w:t>«end:dog_favorites»</w:t>
+          </w:r>
+          <w:r>
+            <w:rPr>
+              <w:noProof/>
+            </w:rPr>
+            <w:fldChar w:fldCharType="end"/>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:fldChar w:fldCharType="begin"/>
+          </w:r>
+          <w:r>
+            <w:instrText xml:space="preserve">MERGEFIELD  end_if:include_dogs \* MERGEFORMAT </w:instrText>
+          </w:r>
+          <w:r>
+            <w:fldChar w:fldCharType="separate"/>
+          </w:r>
+          <w:r>
+            <w:t>«end_if:include_dogs»</w:t>
+          </w:r>
+          <w:r>
+            <w:rPr>
+              <w:noProof/>
+            </w:rPr>
+            <w:fldChar w:fldCharType="end"/>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Mr. Humanface</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>NoMoreQuiets</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+    <w:tr>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>Lady Notdog</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+      <w:tc>
+        <w:p>
+          <w:r>
+            <w:t>iNoise</w:t>
+          </w:r>
+        </w:p>
+      </w:tc>
+    </w:tr>
+  </w:tbl>
+</w:document>

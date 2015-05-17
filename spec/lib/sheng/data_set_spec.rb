@@ -46,6 +46,10 @@ describe Sheng::DataSet do
       }.to raise_error(described_class::KeyNotFound, "did not find in dataset: rabbits.funky (funky not found)")
     end
 
+    it 'does not raise error on key not found if default given' do
+      expect(subject.fetch('rabbits.funky', :default => "horse")).to eq("horse")
+    end
+
     it 'raises an error if Hash found at key' do
       expect {
         subject.fetch('rabbits')

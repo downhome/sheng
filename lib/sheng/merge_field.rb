@@ -75,6 +75,10 @@ module Sheng
       end
     end
 
+    def series_with_commas?
+      filters.detect { |f| f =~ /^series_with_commas$/ }
+    end
+
     def is_end?
       block_prefix && block_prefix.match(/^end/)
     end

@@ -76,6 +76,24 @@ describe Sheng::Sequence do
       end
     end
 
+    context "with a requested comma-separated series" do
+      let(:fragment) { xml_fragment('input/sequence/series_with_commas') }
+      let(:element) { fragment.xpath("//w:instrText").first }
+
+      it "creates a comma-separated list with commas (including serial comma and conjunction)" do
+        dataset = Sheng::DataSet.new({
+          :buffoons => [
+            { :first_name => "Snookers", :last_name => "Fumpleton" },
+            { :first_name => "Francis", :last_name => "Oldgark" },
+            { :first_name => "Spanky", :last_name => "McThanks" }
+          ]
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/series_with_commas')
+      end
+    end
+
     context "with table-based sequences" do
       let(:fragment) { xml_fragment('input/sequence/sequence_in_table') }
 

@@ -1,5 +1,5 @@
 describe Sheng::MergeFieldSet do
-  subject { described_class.new('key', xml_fragment('input/merge_field_set')) }
+  subject { described_class.new('key', xml_fragment('input/merge_field_set/merge_field_set')) }
 
   describe '#interpolate' do
     it 'iterates through nodes and calls interpolate on each' do
@@ -24,7 +24,7 @@ describe Sheng::MergeFieldSet do
       })
 
       subject.interpolate(dataset)
-      expect(subject.xml_fragment).to be_equivalent_to xml_fragment('output/merge_field_set')
+      expect(subject.xml_fragment).to be_equivalent_to xml_fragment('output/merge_field_set/merge_field_set')
     end
   end
 
@@ -34,19 +34,19 @@ describe Sheng::MergeFieldSet do
     end
 
     it 'returns proper tree with embedded sequence' do
-      subject = described_class.new('key', xml_fragment('input/embedded_sequence'))
+      subject = described_class.new('key', xml_fragment('input/sequence/embedded_sequence'))
       expect(subject.to_tree).to eq tree_fixture('embedded_sequence')
     end
 
     it 'throws exception if sequence missing end tag' do
-      subject = described_class.new('key', xml_fragment('input/bad_sequences/no_end'))
+      subject = described_class.new('key', xml_fragment('input/sequence/bad/unclosed_sequence'))
       expect {
         subject.to_tree
       }.to raise_error(Sheng::Sequence::MissingEndTag, "no end tag for sequence: library.books")
     end
 
     it 'throws exception if sequence nesting is wrong' do
-      subject = described_class.new('key', xml_fragment('input/bad_sequences/poorly_nested'))
+      subject = described_class.new('key', xml_fragment('input/sequence/bad/badly_nested_sequence'))
       expect {
         subject.to_tree
       }.to raise_error(Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals")

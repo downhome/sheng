@@ -1,0 +1,14 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD  ocean.fishy \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:b/>
+          <w:i/>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«ocean.fishy»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+</w:document>

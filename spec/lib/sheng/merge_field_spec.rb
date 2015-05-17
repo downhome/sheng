@@ -1,10 +1,10 @@
 describe Sheng::MergeField do
-  let(:fragment) { xml_fragment('input/merge_field') }
+  let(:fragment) { xml_fragment('input/merge_field/merge_field') }
   let(:element) { fragment.xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]").first }
   subject { described_class.new(element) }
 
   describe "new style merge field" do
-    let(:fragment) { xml_fragment('input/new_merge_field') }
+    let(:fragment) { xml_fragment('input/merge_field/new_merge_field') }
     let(:element) { fragment.xpath("//w:instrText").first }
 
     describe '#interpolate' do
@@ -15,12 +15,12 @@ describe Sheng::MergeField do
 
         allow(subject).to receive(:filter_value).with("scrumblefish").and_return("l33tphish")
         subject.interpolate(dataset)
-        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field')
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/merge_field')
       end
     end
 
     describe "with split mergefield instruction text runs" do
-      let(:fragment) { xml_fragment('input/split_merge_field') }
+      let(:fragment) { xml_fragment('input/merge_field/split_merge_field') }
 
       describe '#interpolate' do
         it 'works' do
@@ -29,13 +29,13 @@ describe Sheng::MergeField do
           })
 
           subject.interpolate(dataset)
-          expect(subject.xml_document).to be_equivalent_to xml_fragment('output/split_merge_field')
+          expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/split_merge_field')
         end
       end
     end
 
     describe "with badly formed mergefield tags" do
-      let(:fragment) { xml_fragment('input/bad_merge_field') }
+      let(:fragment) { xml_fragment('input/merge_field/bad/unclosed_merge_field') }
 
       describe "#interpolate" do
         it "raises an exception" do
@@ -55,7 +55,7 @@ describe Sheng::MergeField do
 
       allow(subject).to receive(:filter_value).with("scrumblefish").and_return("l33tphish")
       subject.interpolate(dataset)
-      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field')
+      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/merge_field')
     end
   end
 

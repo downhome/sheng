@@ -1,100 +1,117 @@
 describe Sheng::Sequence do
+  let(:fragment) { xml_fragment('input/sequence/sequence') }
+  let(:element) { fragment.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first }
+  let(:merge_field) { Sheng::MergeField.new(element) }
+  subject { described_class.new(merge_field) }
+
   describe '#interpolate' do
-    it 'duplicates template and replaces mergefields for each array member' do
-      dataset = Sheng::DataSet.new({
-        :library => {
-          :books => [
-            { :title => 'A Radish Summer', :scent => 'totally rad' },
-            { :title => 'Elephants Are Not Your Friend', :scent => 'stinky' }
+    context "with an array of objects" do
+      it 'duplicates template and replaces mergefields for each array member' do
+        dataset = Sheng::DataSet.new({
+          :library => {
+            :books => [
+              { :title => 'A Radish Summer', :scent => 'totally rad' },
+              { :title => 'Elephants Are Not Your Friend', :scent => 'stinky' }
+            ]
+          }
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/sequence')
+      end
+
+      it 'does nothing if key not found in dataset' do
+        dataset = Sheng::DataSet.new({})
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to fragment
+      end
+    end
+
+    context "with an array of primitives" do
+      context "with default iteration variable" do
+        let(:fragment) { xml_fragment('input/sequence/array_sequence') }
+
+        it "substitutes default variable with array elements" do
+          dataset = Sheng::DataSet.new({
+            :my_dog => {
+              :favorite_toys => ["rooster", "wallet", "foot"]
+            }
+          })
+
+          subject.interpolate(dataset)
+          expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/array_sequence')
+        end
+      end
+
+      context "with overridden iteration variable" do
+        let(:fragment) { xml_fragment('input/sequence/overridden_iterator_array_sequence') }
+
+        it "substitutes given variable" do
+          dataset = Sheng::DataSet.new({
+            :perps => ["Hamburglar", "Tony the Tiger"]
+          })
+
+          subject.interpolate(dataset)
+          expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/overridden_iterator_array_sequence')
+        end
+      end
+    end
+
+    context "with table-based sequences" do
+      let(:fragment) { xml_fragment('input/sequence/sequence_in_table') }
+
+      it "creates new rows for each collection object" do
+        dataset = Sheng::DataSet.new({
+          :meals => [
+            { :meal => 'Gravel Noodles', :appetizer => 'Asphalt Rollups', :dessert => 'Concrete Cream', :drink => 'Steamed Water' },
+            { :meal => 'A Single Olive', :appetizer => 'A Strand of Hair', :dessert => 'Wishes and Hopes', :drink => 'The Memory of Soda' }
           ]
-        }
-      })
+        })
 
-      xml = xml_fragment('input/sequence')
-      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
-      subject = described_class.new(merge_field)
-      subject.interpolate(dataset)
-      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence')
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/sequence_in_table')
+      end
     end
 
-    it 'does nothing if key not found in dataset' do
-      dataset = Sheng::DataSet.new({})
+    context "with embedded sequences" do
+      let(:fragment) { xml_fragment('input/sequence/embedded_sequence') }
 
-      xml = xml_fragment('input/sequence')
-      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
-      subject = described_class.new(merge_field)
-      expect(subject.xml_document).to be_equivalent_to xml
-    end
+      it "iterates over sub-sequences properly" do
+        dataset = Sheng::DataSet.new({
+          :library => {
+            :books => [
+              { :title => 'A Radish Summer', :scent => 'totally rad', :pages => [{ :size => 'huge'}, { :size => 'tiny'}] },
+              { :title => 'Elephants Are Not Your Friend', :scent => 'stinky', :pages => [{ :size => 'gigantic'}] }
+            ]
+          }
+        })
 
-    it 'works with simple arrays' do
-      dataset = Sheng::DataSet.new({
-        :my_dog => {
-          :favorite_toys => ["rooster", "wallet", "foot"]
-        }
-      })
-
-      xml = xml_fragment('input/array_sequence')
-      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
-      subject = described_class.new(merge_field)
-      subject.interpolate(dataset)
-      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/array_sequence')
-    end
-
-    it 'can override iteration variable' do
-      dataset = Sheng::DataSet.new({
-        :perps => ["Hamburglar", "Tony the Tiger"]
-      })
-
-      xml = xml_fragment('input/overridden_iterator_array_sequence')
-      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
-      subject = described_class.new(merge_field)
-      subject.interpolate(dataset)
-      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/overridden_iterator_array_sequence')
-    end
-
-    it 'can handle table-based sequences with multiple rows' do
-      dataset = Sheng::DataSet.new({
-        :meals => [
-          { :meal => 'Gravel Noodles', :appetizer => 'Asphalt Rollups', :dessert => 'Concrete Cream', :drink => 'Steamed Water' },
-          { :meal => 'A Single Olive', :appetizer => 'A Strand of Hair', :dessert => 'Wishes and Hopes', :drink => 'The Memory of Soda' }
-        ]
-      })
-
-      xml = xml_fragment('input/table')
-      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
-      subject = described_class.new(merge_field)
-      subject.interpolate(dataset)
-      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/table')
-    end
-
-    it 'can handle embedded sequences' do
-      dataset = Sheng::DataSet.new({
-        :library => {
-          :books => [
-            { :title => 'A Radish Summer', :scent => 'totally rad', :pages => [{ :size => 'huge'}, { :size => 'tiny'}] },
-            { :title => 'Elephants Are Not Your Friend', :scent => 'stinky', :pages => [{ :size => 'gigantic'}] }
-          ]
-        }
-      })
-
-      xml = xml_fragment('input/embedded_sequence')
-      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
-      subject = described_class.new(merge_field)
-
-      subject.interpolate(dataset)
-      expect(subject.xml_document).to be_equivalent_to xml_fragment('output/embedded_sequence')
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/embedded_sequence')
+      end
     end
   end
 
   describe '#new' do
-    it 'raises an exception if sequence has no end tag' do
-      dataset = Sheng::DataSet.new({})
+    context "with unclosed sequence" do
+      let(:fragment) { xml_fragment('input/sequence/bad/unclosed_sequence') }
+      it 'raises an exception indicating the missing end tag' do
+        dataset = Sheng::DataSet.new({})
+        expect {
+          subject
+        }.to raise_error(described_class::MissingEndTag, "no end tag for sequence: library.books")
+      end
+    end
 
-      xml = xml_fragment('input/bad_sequences/no_end')
-      merge_field = Sheng::MergeField.new(xml.xpath("//w:fldSimple[contains(@w:instr, 'start:')]").first)
-      expect {
-        subject = described_class.new(merge_field)
-      }.to raise_error(described_class::MissingEndTag, "no end tag for sequence: library.books")
+    context "with badly nested sequence" do
+      let(:fragment) { xml_fragment('input/sequence/bad/badly_nested_sequence') }
+      it 'raises an exception indicating the nesting issue' do
+        dataset = Sheng::DataSet.new({})
+        expect {
+          subject
+        }.to raise_error(described_class::ImproperNesting, "expected end:birds, got end:animals")
+      end
     end
   end
 end

@@ -1,5 +1,9 @@
+require_relative "path_helpers"
+
 module Sheng
   class MergeFieldSet
+    include PathHelpers
+
     attr_reader :xml_fragment, :xml_document, :key
 
     def initialize(key, xml_fragment)
@@ -70,18 +74,6 @@ module Sheng
 
     def basic_node_elements
       xml_fragment.xpath(".//#{mergefield_element_path}|.//#{new_mergefield_element_path}|.//#{checkbox_element_path}")
-    end
-
-    def new_mergefield_element_path
-      "w:instrText[text()[contains(., 'MERGEFIELD')]]"
-    end
-
-    def mergefield_element_path
-      "w:fldSimple[contains(@w:instr, 'MERGEFIELD')]"
-    end
-
-    def checkbox_element_path
-      "w:checkBox/.."
     end
   end
 end

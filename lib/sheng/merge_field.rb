@@ -64,7 +64,7 @@ module Sheng
     end
 
     def iteration_variable
-      if filters.detect { |f| f =~ /^as\((.*)\)/ }
+      if filters.detect { |f| f =~ /^as\((.*)\)$/ }
         $1.to_sym
       else
         :item

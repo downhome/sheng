@@ -66,24 +66,16 @@ describe Sheng::MergeField do
   end
 
   describe '#key' do
-    it 'returns the raw key with start metadata stripped off' do
+    it 'returns the raw key with start/end metadata stripped off' do
       allow(subject).to receive(:raw_key).and_return('start:whipple.dooter')
       expect(subject.key).to eq 'whipple.dooter'
-    end
-
-    it 'returns the raw key with end metadata stripped off' do
-      allow(subject).to receive(:raw_key).and_return('end:smock.fortuna')
-      expect(subject.key).to eq 'smock.fortuna'
+      allow(subject).to receive(:raw_key).and_return('end:smunch.dooter')
+      expect(subject.key).to eq 'smunch.dooter'
     end
 
     it 'returns the raw key with filters stripped off' do
       allow(subject).to receive(:raw_key).and_return("whumpies | cook | dress(frock)")
       expect(subject.key).to eq 'whumpies'
-    end
-
-    it 'returns the raw key as is if no start or end token' do
-      allow(subject).to receive(:raw_key).and_return('ouch_i_hate.frisbees')
-      expect(subject.key).to eq 'ouch_i_hate.frisbees'
     end
   end
 
@@ -91,6 +83,45 @@ describe Sheng::MergeField do
     it "returns filters extracted from raw_key" do
       allow(subject).to receive(:raw_key).and_return("whumpies | cook | dress(frock)")
       expect(subject.filters).to eq(["cook", "dress(frock)"])
+    end
+
+    it "returns empty array if no filters in raw key" do
+      allow(subject).to receive(:raw_key).and_return("whatever.this.is")
+      expect(subject.filters).to eq([])
+    end
+  end
+
+  describe "#is_start?" do
+    it "returns true if mergefield is start of block" do
+      allow(subject).to receive(:raw_key).and_return("start:whatever")
+      expect(subject.is_start?).to be_truthy
+    end
+
+    it "returns false if mergefield is end of block" do
+      allow(subject).to receive(:raw_key).and_return("end:whatever")
+      expect(subject.is_start?).to be_falsy
+    end
+
+    it "returns false if mergefield is not a block bracket" do
+      allow(subject).to receive(:raw_key).and_return("whatever")
+      expect(subject.is_start?).to be_falsy
+    end
+  end
+
+  describe "#is_end?" do
+    it "returns true if mergefield is end of block" do
+      allow(subject).to receive(:raw_key).and_return("end:whatever")
+      expect(subject.is_end?).to be_truthy
+    end
+
+    it "returns false if mergefield is start of block" do
+      allow(subject).to receive(:raw_key).and_return("start:whatever")
+      expect(subject.is_end?).to be_falsy
+    end
+
+    it "returns false if mergefield is not a block bracket" do
+      allow(subject).to receive(:raw_key).and_return("whatever")
+      expect(subject.is_end?).to be_falsy
     end
   end
 

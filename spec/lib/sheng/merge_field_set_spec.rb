@@ -42,14 +42,14 @@ describe Sheng::MergeFieldSet do
       subject = described_class.new('key', xml_fragment('input/sequence/bad/unclosed_sequence'))
       expect {
         subject.to_tree
-      }.to raise_error(Sheng::Sequence::MissingEndTag, "no end tag for sequence: library.books")
+      }.to raise_error(Sheng::Sequence::MissingEndTag, "no end tag for start:library.books")
     end
 
     it 'throws exception if sequence nesting is wrong' do
       subject = described_class.new('key', xml_fragment('input/sequence/bad/badly_nested_sequence'))
       expect {
         subject.to_tree
-      }.to raise_error(Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals")
+      }.to raise_error(Sheng::Sequence::ImproperNesting, "expected end tag for start:birds, got end:animals")
     end
   end
 

@@ -19,6 +19,13 @@ describe Sheng::MergeField do
       end
     end
 
+    describe "#xml" do
+      it "returns full nodeset surrounding element" do
+        expect(subject.xml.count).to eq(5)
+        expect(subject.xml[1]).to eq(element.ancestors[0])
+      end
+    end
+
     describe "with split mergefield instruction text runs" do
       let(:fragment) { xml_fragment('input/merge_field/split_merge_field') }
 
@@ -30,6 +37,21 @@ describe Sheng::MergeField do
 
           subject.interpolate(dataset)
           expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/split_merge_field')
+        end
+      end
+    end
+
+    describe "with mergefields in line with other text" do
+      let(:fragment) { xml_fragment('input/merge_field/inline_merge_field') }
+
+      describe '#interpolate' do
+        it 'works' do
+          dataset = Sheng::DataSet.new({
+            :prefix => "snuffle"
+          })
+
+          subject.interpolate(dataset)
+          expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/inline_merge_field')
         end
       end
     end
@@ -56,6 +78,12 @@ describe Sheng::MergeField do
       allow(subject).to receive(:filter_value).with("scrumblefish").and_return("l33tphish")
       subject.interpolate(dataset)
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/merge_field')
+    end
+  end
+
+  describe "#xml" do
+    it "returns element" do
+      expect(subject.xml).to eq(subject.element)
     end
   end
 

@@ -58,6 +58,24 @@ describe Sheng::Sequence do
       end
     end
 
+    context "with an inline sequence" do
+      let(:fragment) { xml_fragment('input/sequence/inline_sequence') }
+
+      it "interpolates and maintains inline structure" do
+        dataset = Sheng::DataSet.new({
+          :library => {
+            :books => [
+              { :title => 'A Radish Summer', :scent => 'totally rad' },
+              { :title => 'Elephants Are Not Your Friend', :scent => 'stinky' }
+            ]
+          }
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/inline_sequence')
+      end
+    end
+
     context "with table-based sequences" do
       let(:fragment) { xml_fragment('input/sequence/sequence_in_table') }
 
@@ -100,7 +118,7 @@ describe Sheng::Sequence do
         dataset = Sheng::DataSet.new({})
         expect {
           subject
-        }.to raise_error(described_class::MissingEndTag, "no end tag for sequence: library.books")
+        }.to raise_error(described_class::MissingEndTag, "no end tag for start:library.books")
       end
     end
 
@@ -110,7 +128,7 @@ describe Sheng::Sequence do
         dataset = Sheng::DataSet.new({})
         expect {
           subject
-        }.to raise_error(described_class::ImproperNesting, "expected end:birds, got end:animals")
+        }.to raise_error(described_class::ImproperNesting, "expected end tag for start:birds, got end:animals")
       end
     end
   end

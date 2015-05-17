@@ -2,6 +2,7 @@ module Sheng
   class MergeField
     AllowedFilters = [:upcase, :downcase, :capitalize, :titleize, :reverse]
     InstructionTextRegex = /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/
+    KeyRegex = /^(start:|end:)?\s*([^\|\s]+)\s*\|?(.*)?/
 
     class BadMergefieldError < StandardError; end
 
@@ -17,16 +18,12 @@ module Sheng
     end
 
     def key
-      raw_key.gsub(/^(start:|end:)|(\s+.*)/, '')
+      raw_key.gsub(KeyRegex, '\2')
     end
 
     def filters
-      match = raw_key.match(/\|(.*)$/)
-      if match
-        match.captures[0].split("|").map(&:strip)
-      else
-        []
-      end
+      match = raw_key.match(KeyRegex)
+      match.captures[2].split("|").map(&:strip)
     end
 
     def raw_key
@@ -59,8 +56,15 @@ module Sheng
       end
     end
 
+    def block_prefix
+      @potential_prefix ||= begin
+        potential_prefix = raw_key.match(KeyRegex).captures[0]
+        potential_prefix && potential_prefix.gsub(/\:$/, '')
+      end
+    end
+
     def is_start?
-      raw_key =~ /^start:/
+      block_prefix && !block_prefix.match(/^end/)
     end
 
     def iteration_variable
@@ -72,24 +76,72 @@ module Sheng
     end
 
     def is_end?
-      raw_key =~ /^end:/
+      block_prefix && block_prefix.match(/^end/)
+    end
+
+    def remove
+      if inline?
+        xml.remove
+      elsif is_table_row_marker?
+        containing_element.ancestors[1].remove
+      else
+        containing_element.remove
+      end
+    end
+
+    def containing_element
+      parents_until_container = new_style? ? 2 : 1
+      element.ancestors[parents_until_container - 1]
+    end
+
+    def is_table_row_marker?
+      in_table_row? && (is_start? || is_end?)
+    end
+
+    def in_table_row?
+      containing_element.ancestors[1] && containing_element.ancestors[1].name == "tr"
+    end
+
+    def inline?
+      containing_element.children.text != xml.text
+    end
+
+    def add_previous_sibling(fragment_to_add)
+      if inline?
+        [xml].flatten.first.add_previous_sibling(fragment_to_add)
+      elsif is_table_row_marker?
+        containing_element.ancestors[1].add_previous_sibling(fragment_to_add)
+      else
+        containing_element.add_previous_sibling(fragment_to_add)
+      end
+    end
+
+    def next_element
+      if inline?
+        [xml].flatten.last.next_element
+      elsif is_table_row_marker?
+        containing_element.ancestors[1].next_element
+      else
+        containing_element.next_element
+      end
+    end
+
+    def xml
+      return element unless new_style?
+      nodeset = Nokogiri::XML::NodeSet.new(xml_document)
+      current_node = element.parent.previous_element
+      nodeset << current_node
+      loop do
+        current_node = current_node.next_element
+        nodeset << current_node
+        break if current_node.at_xpath("./w:fldChar[contains(@w:fldCharType, 'end')]")
+      end
+      nodeset
     end
 
     def replace_mergefield(value)
-      if !new_style?
-        element.replace(new_text_run_node(value))
-      else
-        nodeset = Nokogiri::XML::NodeSet.new(xml_document)
-        current_node = element.parent.previous_element
-        nodeset << current_node
-        loop do
-          current_node = current_node.next_element
-          nodeset << current_node
-          break if current_node.at_xpath("./w:fldChar[contains(@w:fldCharType, 'end')]")
-        end
-        nodeset.before(new_text_run_node(value))
-        nodeset.remove
-      end
+      xml.before(new_text_run_node(value))
+      xml.remove
     end
 
     def interpolate(data_set)

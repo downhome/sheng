@@ -76,13 +76,13 @@ describe Sheng::Docx do
       Sheng::WMLFile::MergefieldNotReplacedError
 
     it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
-      Sheng::Sequence::MissingEndTag, "no end tag for sequence: owner_signature"
+      Sheng::Sequence::MissingEndTag, "no end tag for start:owner_signature"
 
     it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
       Sheng::WMLFile::MergefieldNotReplacedError
 
     it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
-      Sheng::Sequence::ImproperNesting, "expected end:birds, got end:animals"
+      Sheng::Sequence::ImproperNesting, "expected end tag for start:birds, got end:animals"
   end
 
   describe '#new' do

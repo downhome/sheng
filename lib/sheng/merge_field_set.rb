@@ -73,7 +73,9 @@ module Sheng
     end
 
     def basic_node_elements
-      xml_fragment.xpath(".//#{mergefield_element_path}|.//#{new_mergefield_element_path}|.//#{checkbox_element_path}")
+      child_nodes = xml_fragment.xpath(".//#{mergefield_element_path}|.//#{new_mergefield_element_path}|.//#{checkbox_element_path}").to_a
+      child_nodes += xml_fragment.select { |element| element.name == "fldSimple" }
+      child_nodes
     end
   end
 end

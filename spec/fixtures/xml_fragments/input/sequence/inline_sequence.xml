@@ -1,0 +1,24 @@
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:p>
+    <w:fldSimple w:instr=" MERGEFIELD start:library.books \* MERGEFORMAT ">
+      <w:r>
+        <w:t>«start:library.books»</w:t>
+      </w:r>
+    </w:fldSimple>
+    <w:fldSimple w:instr=" MERGEFIELD title \* MERGEFORMAT ">
+      <w:r>
+        <w:t>«title»</w:t>
+      </w:r>
+    </w:fldSimple>
+    <w:fldSimple w:instr=" MERGEFIELD scent \* MERGEFORMAT ">
+      <w:r>
+        <w:t>«scent»</w:t>
+      </w:r>
+    </w:fldSimple>
+    <w:fldSimple w:instr=" MERGEFIELD end:library.books \* MERGEFORMAT ">
+      <w:r>
+        <w:t>«end:library.books»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+</w:document>

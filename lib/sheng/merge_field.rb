@@ -169,7 +169,7 @@ module Sheng
 
     def filter_value(value)
       filters.inject(value) { |val, filter|
-        if AllowedFilters.include?(filter.to_sym)
+        if AllowedFilters.include?(filter.to_sym) && val.respond_to?(filter.to_sym)
           val.send(filter)
         else
           val

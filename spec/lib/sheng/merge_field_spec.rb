@@ -196,6 +196,11 @@ describe Sheng::MergeField do
       allow(subject).to receive(:filters).and_return(["elephantize"])
       expect(subject.filter_value("ribbons are grand")).to eq("ribbons are grand")
     end
+
+    it "does nothing if value doesn't respond to filter" do
+      allow(subject).to receive(:filters).and_return(["upcase"])
+      expect(subject.filter_value(130)).to eq(130)
+    end
   end
 
   describe "#iteration_variable" do

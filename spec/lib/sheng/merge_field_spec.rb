@@ -113,6 +113,11 @@ describe Sheng::MergeField do
       expect(subject.filters).to eq(["cook", "dress(frock)"])
     end
 
+    it "doesn't care about whitespace" do
+      allow(subject).to receive(:raw_key).and_return("whumpies|cook|dress(frock)")
+      expect(subject.filters).to eq(["cook", "dress(frock)"])
+    end
+
     it "returns empty array if no filters in raw key" do
       allow(subject).to receive(:raw_key).and_return("whatever.this.is")
       expect(subject.filters).to eq([])

@@ -48,7 +48,7 @@ module Sheng
       r_tag = new_tag('r')
       t_tag = new_tag('t')
       t_tag["xml:space"] = "preserve"
-      t_tag.content = ", #{last ? 'and ' : ''}"
+      t_tag.content = ", #{last ? "#{@start_field.comma_series_conjunction} " : ""}"
       r_tag.add_child(t_tag)
       r_tag
     end

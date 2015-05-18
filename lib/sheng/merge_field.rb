@@ -85,7 +85,15 @@ module Sheng
     end
 
     def series_with_commas?
-      filters.detect { |f| f =~ /^series_with_commas$/ }
+      filters.detect { |f| f =~ /^series_with_commas/ }
+    end
+
+    def comma_series_conjunction
+      if filters.detect { |f| f =~ /^series_with_commas\((.*)\)$/ }
+        $1
+      else
+        "and"
+      end
     end
 
     def is_end?

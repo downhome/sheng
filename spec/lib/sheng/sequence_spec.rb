@@ -92,6 +92,23 @@ describe Sheng::Sequence do
         subject.interpolate(dataset)
         expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/series_with_commas')
       end
+
+      context "with custom conjunction" do
+        let(:fragment) { xml_fragment('input/sequence/series_with_commas', :gsub => { "series_with_commas" => "series_with_commas(und)"}) }
+
+        it "uses given conjunction instead of default 'and'" do
+          dataset = Sheng::DataSet.new({
+            :buffoons => [
+              { :first_name => "Snookers", :last_name => "Fumpleton" },
+              { :first_name => "Francis", :last_name => "Oldgark" },
+              { :first_name => "Spanky", :last_name => "McThanks" }
+            ]
+          })
+
+          subject.interpolate(dataset)
+          expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/series_with_commas', :gsub => { ", and" => ", und"})
+        end
+      end
     end
 
     context "with table-based sequences" do

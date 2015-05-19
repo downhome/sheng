@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main">
+  <w:p>
+    <w:r>
+      <w:t>Yay, there are people.</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">People: </w:t>
+    </w:r>
+    <w:r>
+      <w:t>Bringo</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> </w:t>
+    </w:r>
+    <w:r>
+      <w:t>Brango</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> and </w:t>
+    </w:r>
+    <w:r>
+      <w:t>Uncle</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> </w:t>
+    </w:r>
+    <w:r>
+      <w:t>Hork</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve">.</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">Oh, I forgot their favorites: </w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t>Bringo</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> loves the color </w:t>
+    </w:r>
+    <w:r>
+      <w:t>Ghost</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> and loves the numbers </w:t>
+    </w:r>
+    <w:r>
+      <w:t>1</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve">, </w:t>
+    </w:r>
+    <w:r>
+      <w:t>maybe</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve">, and </w:t>
+    </w:r>
+    <w:r>
+      <w:t>0</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve">. Do they love candy? </w:t>
+    </w:r>
+    <w:ffData>
+      <w:name w:val="favorites.loves_candy"/>
+      <w:enabled/>
+      <w:calcOnExit w:val="0"/>
+      <w:checkBox>
+        <w:sizeAuto/>
+        <w:default w:val="0"/>
+      </w:checkBox>
+    </w:ffData>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t>Uncle</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> loves the color </w:t>
+    </w:r>
+    <w:r>
+      <w:t>Xi</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> and loves the numbers </w:t>
+    </w:r>
+    <w:r>
+      <w:t>unicorn</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> and </w:t>
+    </w:r>
+    <w:r>
+      <w:t>paper</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve">. Do they love candy? </w:t>
+    </w:r>
+    <w:ffData>
+      <w:name w:val="favorites.loves_candy"/>
+      <w:enabled/>
+      <w:calcOnExit w:val="0"/>
+      <w:checkBox>
+        <w:sizeAuto/>
+        <w:default w:val="1"/>
+      </w:checkBox>
+    </w:ffData>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t>Now let's talk about frogs!</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">We have a frog with </w:t>
+    </w:r>
+    <w:r>
+      <w:t>bioluminescent</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> warts, </w:t>
+    </w:r>
+    <w:r>
+      <w:t>yak</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> legs, and whose feelings are </w:t>
+    </w:r>
+    <w:r>
+      <w:t>insignificant</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> and </w:t>
+    </w:r>
+    <w:r>
+      <w:t>worthless</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve">We have a frog with </w:t>
+    </w:r>
+    <w:r>
+      <w:t>198</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> warts, </w:t>
+    </w:r>
+    <w:r>
+      <w:t>silky smooth</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> legs, and whose feelings are </w:t>
+    </w:r>
+    <w:r>
+      <w:t>stylish</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> and </w:t>
+    </w:r>
+    <w:r>
+      <w:t>nap</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">The king's house has </w:t>
+    </w:r>
+    <w:r>
+      <w:t>bony</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> windows and </w:t>
+    </w:r>
+    <w:r>
+      <w:t>pig</w:t>
+    </w:r>
+    <w:r>
+      <w:t xml:space="preserve"> doors.</w:t>
+    </w:r>
+  </w:p>
+</w:document>

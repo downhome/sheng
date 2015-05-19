@@ -1,5 +1,6 @@
 describe Sheng::MergeFieldSet do
-  subject { described_class.new('key', xml_fragment('input/merge_field_set/merge_field_set')) }
+  let(:fragment) { xml_fragment('input/merge_field_set/merge_field_set') }
+  subject { described_class.new('key', fragment) }
 
   describe '#interpolate' do
     it 'iterates through nodes and calls interpolate on each' do
@@ -25,6 +26,55 @@ describe Sheng::MergeFieldSet do
 
       subject.interpolate(dataset)
       expect(subject.xml_fragment).to be_equivalent_to xml_fragment('output/merge_field_set/merge_field_set')
+    end
+
+    context "with complex nesting and reuse" do
+      let(:fragment) { xml_fragment('input/merge_field_set/complex_nesting_and_reuse') }
+      it 'works' do
+        dataset = Sheng::DataSet.new({
+          :people => [
+            {
+              :first_name => "Bringo",
+              :last_name => "Brango",
+              :favorites => {
+                :color => "Ghost",
+                :numbers => [1, "maybe", 0],
+                :loves_candy => false
+              }
+            },
+            {
+              :first_name => "Uncle",
+              :last_name => "Hork",
+              :favorites => {
+                :color => "Xi",
+                :numbers => ["unicorn", "paper"],
+                :loves_candy => true
+              }
+            }
+          ],
+          :frogs => [
+            {
+              :warts => "bioluminescent",
+              :legs => "yak",
+              :feelings => ["insignificant", "worthless"]
+            },
+            {
+              :warts => 198,
+              :legs => "silky smooth",
+              :feelings => ["stylish", "nap"]
+            }
+          ],
+          :king => {
+            :house => {
+              :windows => "bony",
+              :doors => "pig"
+            }
+          }
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_fragment).to be_equivalent_to xml_fragment('output/merge_field_set/complex_nesting_and_reuse')
+      end
     end
   end
 

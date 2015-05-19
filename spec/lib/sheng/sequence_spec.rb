@@ -99,6 +99,18 @@ describe Sheng::Sequence do
         expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/series_with_commas')
       end
 
+      it "does not add a comma before the conjunction in a 2-item list" do
+        dataset = Sheng::DataSet.new({
+          :buffoons => [
+            { :first_name => "Snookers", :last_name => "Fumpleton" },
+            { :first_name => "Spanky", :last_name => "McThanks" }
+          ]
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/series_with_commas_two_items')
+      end
+
       context "with custom conjunction" do
         let(:fragment) { xml_fragment('input/sequence/series_with_commas', :gsub => { "series_with_commas" => "series_with_commas(und)"}) }
 

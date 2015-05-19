@@ -45,7 +45,7 @@ module Sheng
       label
     end
 
-    def styling_paragraph
+    def styling_run
       if new_style?
         separator_field = element.ancestors[1].at_xpath(".//w:fldChar[contains(@w:fldCharType, 'separate')]")
         if separator_field
@@ -161,7 +161,10 @@ module Sheng
     end
 
     def replace_mergefield(value)
-      xml.before(new_text_run_node(value))
+      new_run = Sheng::Support.new_text_run(
+        value, xml_document: xml_document, style_run: styling_run
+      )
+      xml.before(new_run)
       xml.remove
     end
 
@@ -183,23 +186,6 @@ module Sheng
           val
         end
       }
-    end
-
-    def new_text_run_node value
-      r_tag = new_tag('r')
-      if styling_paragraph
-        r_tag.add_child(styling_paragraph)
-      end
-      t_tag = new_tag('t')
-      t_tag.content = value
-      r_tag.add_child(t_tag)
-      r_tag
-    end
-
-    def new_tag tag_name
-      tag = Nokogiri::XML::Node.new(tag_name, xml_document)
-      tag.namespace = xml_document.root.namespace_definitions.find { |ns| ns.prefix == "w" }
-      tag
     end
   end
 end

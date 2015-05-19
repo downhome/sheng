@@ -32,14 +32,19 @@ module Sheng
     end
 
     def required_hash(placeholder = nil)
+      return nil if is_a?(Sequence) && array_of_primitives_expected?
       nodes.inject({}) do |node_list, node|
-        value = node.is_a?(Sequence) ? [node.required_hash(placeholder)] : placeholder
-        key_parts = node.key.split(/\./)
-        last_key = key_parts.pop
-        hsh = key_parts.reverse.inject(last_key => value) do |memo, key|
-          memo = { key => memo }; memo
+        hsh = if node.is_a?(ConditionalBlock)
+          node.required_hash(placeholder)
+        else
+          value = node.is_a?(Block) ? [node.required_hash(placeholder)].compact : placeholder
+          key_parts = node.key.split(/\./)
+          last_key = key_parts.pop
+          key_parts.reverse.inject(last_key => value) do |memo, key|
+            memo = { key => memo }; memo
+          end
         end
-        node_list.deep_merge(hsh)
+        Sheng::Support.merge_required_hashes(node_list, hsh)
       end
     end
 
@@ -49,15 +54,16 @@ module Sheng
       @nodes ||= begin
         current_block_key = nil
         basic_nodes.map do |node|
+          next if node.is_a?(CheckBox) && current_block_key
           if node.is_a? MergeField
             if current_block_key
-              if node.is_end? && node.key == current_block_key
+              if node.is_end? && node.start_key == current_block_key
                 current_block_key = nil
               end
               next
             elsif node.is_start?
+              current_block_key = node.start_key
               node = node.block_type.new(node)
-              current_block_key = node.key
             end
           end
           node

@@ -34,7 +34,7 @@ module Sheng
     end
 
     def required_hash
-      wml_files.inject({}) { |memo, wml| memo.deep_merge(wml.required_hash) }
+      wml_files.inject({}) { |memo, wml| Sheng::Support.merge_required_hashes(memo, wml.required_hash) }
     end
 
     def generate(path, force: false)

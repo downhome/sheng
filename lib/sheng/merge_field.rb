@@ -61,6 +61,16 @@ module Sheng
       end
     end
 
+    def start_key
+      if is_start?
+        "#{block_prefix}:#{key}"
+      elsif block_prefix == "end"
+        "start:#{key}"
+      else
+        "#{block_prefix.gsub(/^end_/, '')}:#{key}"
+      end
+    end
+
     def block_type
       return nil unless block_prefix
       if ["start", "end"].include?(block_prefix)

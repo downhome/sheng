@@ -117,5 +117,38 @@ describe Sheng::MergeFieldSet do
         "veggies"=> { "green" => { "spinach" => :foo } }
       })
     end
+
+    context "with multiple blocks using the same variable" do
+      let(:fragment) { xml_fragment('input/merge_field_set/complex_nesting_and_reuse') }
+
+      it 'properly merges all requirements when multiple blocks reuse the same variable' do
+        expect(subject.required_hash).to eq({
+          "people" => [
+            {
+              "first_name" => nil,
+              "last_name" => nil,
+              "favorites" => {
+                "color" => nil,
+                "numbers" => [],
+                "loves_candy" => nil
+              }
+            }
+          ],
+          "frogs" => [
+            {
+              "warts" => nil,
+              "legs" => nil,
+              "feelings" => []
+            }
+          ],
+          "king" => {
+            "house" => {
+              "windows" => nil,
+              "doors" => nil
+            }
+          }
+        })
+      end
+    end
   end
 end

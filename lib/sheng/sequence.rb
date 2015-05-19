@@ -14,6 +14,11 @@ module Sheng
       nil
     end
 
+    def array_of_primitives_expected?
+      return true if nodes.map(&:key).uniq == ["item"]
+      @start_field.iteration_variable != :item
+    end
+
     def add_sequence_element(member, index, last: false)
       if series_with_commas? && index > 0
         @start_field.add_previous_sibling(serial_comma_node(index, last: last))

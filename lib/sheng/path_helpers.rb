@@ -1,7 +1,7 @@
 module Sheng
   module PathHelpers
     def new_mergefield_element_path
-      "w:instrText[text()[contains(., 'MERGEFIELD')]]"
+      "w:fldChar[contains(@w:fldCharType, 'begin')]"
     end
 
     def mergefield_element_path

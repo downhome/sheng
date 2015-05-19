@@ -14,7 +14,7 @@ module Sheng
     end
 
     def new_style?
-      element.name == 'instrText'
+      element.name == 'fldChar'
     end
 
     def key
@@ -32,8 +32,8 @@ module Sheng
 
     def mergefield_instruction_text
       return element['w:instr'] unless new_style?
-      label = element.text
-      current_element = element.parent
+      current_element = element.parent.next_element
+      label = current_element.at_xpath(".//w:instrText").text
       loop do
         current_element = current_element.next_element
         next if ["bookmarkStart", "bookmarkEnd"].include?(current_element.name)
@@ -155,7 +155,7 @@ module Sheng
     def xml
       return element unless new_style?
       nodeset = Nokogiri::XML::NodeSet.new(xml_document)
-      current_node = element.parent.previous_element
+      current_node = element.parent
       nodeset << current_node
       loop do
         current_node = current_node.next_element

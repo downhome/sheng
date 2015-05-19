@@ -1,6 +1,6 @@
 describe Sheng::ConditionalBlock do
   let(:fragment) { xml_fragment('input/conditional_block/conditional_block_if') }
-  let(:element) { fragment.xpath("//w:instrText").first }
+  let(:element) { fragment.xpath("//w:fldChar[contains(@w:fldCharType, 'begin')]").first }
   let(:merge_field) { Sheng::MergeField.new(element) }
   subject { described_class.new(merge_field) }
 

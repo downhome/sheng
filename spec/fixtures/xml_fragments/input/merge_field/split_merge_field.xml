@@ -3,7 +3,10 @@
     <w:fldChar w:fldCharType="begin"/>
   </w:r>
   <w:r>
-    <w:instrText xml:space="preserve">MERGEFIELD  persim</w:instrText>
+    <w:instrText xml:space="preserve">MERGE</w:instrText>
+  </w:r>
+  <w:r>
+    <w:instrText xml:space="preserve">FIELD  persim</w:instrText>
   </w:r>
   <w:r>
     <w:instrText>mon_</w:instrText>

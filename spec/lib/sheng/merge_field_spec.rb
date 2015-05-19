@@ -5,7 +5,7 @@ describe Sheng::MergeField do
 
   describe "new style merge field" do
     let(:fragment) { xml_fragment('input/merge_field/new_merge_field') }
-    let(:element) { fragment.xpath("//w:instrText").first }
+    let(:element) { fragment.xpath("//w:fldChar[contains(@w:fldCharType, 'begin')]").first }
 
     describe '#raw_key' do
       it 'returns the mergefield name from the element' do
@@ -28,7 +28,7 @@ describe Sheng::MergeField do
     describe "#xml" do
       it "returns full nodeset surrounding element" do
         expect(subject.xml.count).to eq(5)
-        expect(subject.xml[1]).to eq(element.ancestors[0])
+        expect(subject.xml[0]).to eq(element.ancestors[0])
       end
     end
 

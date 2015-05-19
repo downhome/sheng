@@ -19,8 +19,10 @@ module Sheng
         return [MergeField.new(fragment)]
       end
       fragment.xpath(".//#{mergefield_element_path}|.//#{new_mergefield_element_path}").map do |field_simple|
-        MergeField.new(field_simple)
-      end
+        unless field_simple.at('.//w:checkBox')
+          MergeField.new(field_simple)
+        end
+      end.compact
     end
 
     def get_node_set_and_end_field
@@ -47,11 +49,7 @@ module Sheng
           end
         end
 
-        if end_field
-          if end_field.inline? && end_field.new_style?
-            node_set.pop
-          end
-        else
+        unless end_field
           node_set << next_node
         end
       end

@@ -5,6 +5,7 @@
 module Sheng
   class Docx
     class InvalidFile < StandardError; end
+    class FileAlreadyExists < StandardError; end
 
     WMLFileNamePatterns = [
       /word\/document.xml/,
@@ -36,7 +37,11 @@ module Sheng
       wml_files.inject({}) { |memo, wml| memo.deep_merge(wml.required_hash) }
     end
 
-    def generate(path)
+    def generate(path, force: false)
+      if File.exists?(path) && !force
+        raise FileAlreadyExists, "File at #{path} already exists"
+      end
+
       buffer = Zip::OutputStream.write_buffer do |out|
         begin
           @input_zip_file.entries.each do |entry|

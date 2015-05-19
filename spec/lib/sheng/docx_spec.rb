@@ -9,18 +9,32 @@ describe Sheng::Docx do
 
   subject { described_class.new(input_file, input_hash) }
 
+  after(:each) do
+    FileUtils.rm(output_file) if File.exists?(output_file)
+  end
+
   describe '#generate' do
     it 'should produce the same document as fixtures output_file' do
       subject.generate(output_file)
-      Zip::File.new(output_file).entries.each do |file|
-        if mutable_documents.include?(file.name)
-          Zip::File.open(output_file) do |zip|
-            gem_output_xml      = zip.read(file)
-            fixtures_output_xml = Zip::File.new(expected_output_file).read(file)
+      in_mutable_wml_files(output_file) do |file_name, output_wml|
+        expected_wml = Zip::File.new(expected_output_file).read(file_name)
+        expect(output_wml).to be_equivalent_to expected_wml
+      end
+    end
 
-            expect(gem_output_xml).to be_equivalent_to fixtures_output_xml
-          end
-        end
+    it 'raises an exception if file already exists and force option not given' do
+      File.open(output_file, "w").write("nothing")
+      expect {
+        subject.generate(output_file)
+      }.to raise_error(described_class::FileAlreadyExists)
+    end
+
+    it 'overwrites file if file already exists but force option is true' do
+      File.open(output_file, "w").write("nothing")
+      subject.generate(output_file, force: true)
+      in_mutable_wml_files(output_file) do |file_name, output_wml|
+        expected_wml = Zip::File.new(expected_output_file).read(file_name)
+        expect(output_wml).to be_equivalent_to expected_wml
       end
     end
 
@@ -30,15 +44,9 @@ describe Sheng::Docx do
 
       it 'still works' do
         subject.generate(output_file)
-        Zip::File.new(output_file).entries.each do |file|
-          if mutable_documents.include?(file.name)
-            Zip::File.open(output_file) do |zip|
-              gem_output_xml      = zip.read(file)
-              fixtures_output_xml = Zip::File.new(expected_output_file).read(file)
-
-              expect(gem_output_xml).to be_equivalent_to fixtures_output_xml
-            end
-          end
+        in_mutable_wml_files(output_file) do |file_name, output_wml|
+          expected_wml = Zip::File.new(expected_output_file).read(file_name)
+          expect(output_wml).to be_equivalent_to expected_wml
         end
       end
     end

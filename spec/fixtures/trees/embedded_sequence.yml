@@ -1,11 +1,11 @@
 ---
 - :type: sequence
-  :key: library.books
+  :key: start:library.books
   :nodes:
   - :type: merge_field
     :key: title
   - :type: sequence
-    :key: pages
+    :key: start:pages
     :nodes:
     - :type: merge_field
       :key: size

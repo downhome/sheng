@@ -20,7 +20,10 @@ module Sheng
 
     def to_tree
       nodes.map do |node|
-        hsh = { :type => node.class.name.underscore.gsub(/^sheng\//, ''), :key => node.key }
+        hsh = {
+          :type => node.class.name.underscore.gsub(/^sheng\//, ''),
+          :key => node.raw_key
+        }
         if node.is_a? MergeFieldSet
           hsh[:nodes] = node.to_tree
         end

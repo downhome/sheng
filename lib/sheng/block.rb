@@ -10,6 +10,10 @@ module Sheng
       @xml_fragment, @end_field = get_node_set_and_end_field
     end
 
+    def raw_key
+      @start_field.raw_key
+    end
+
     def extract_mergefields(fragment)
       if fragment.name == "fldSimple"
         return [MergeField.new(fragment)]

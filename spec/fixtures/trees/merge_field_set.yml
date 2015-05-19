@@ -2,9 +2,9 @@
 - :type: merge_field
   :key: person.first_name
 - :type: merge_field
-  :key: person.last_name
+  :key: person.last_name | upcase
 - :type: sequence
-  :key: person.socks
+  :key: start:person.socks
   :nodes:
   - :type: merge_field
     :key: color

@@ -4,6 +4,12 @@ describe Sheng::Sequence do
   let(:merge_field) { Sheng::MergeField.new(element) }
   subject { described_class.new(merge_field) }
 
+  describe "#raw_key" do
+    it "returns key from start_field" do
+      expect(subject.raw_key).to eq(merge_field.raw_key)
+    end
+  end
+
   describe '#interpolate' do
     context "with an array of objects" do
       it 'duplicates template and replaces mergefields for each array member' do

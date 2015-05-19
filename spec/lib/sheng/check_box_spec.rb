@@ -7,6 +7,12 @@ describe Sheng::CheckBox do
     end
   end
 
+  describe '#raw_key' do
+    it 'returns key' do
+      expect(subject.raw_key).to eq subject.key
+    end
+  end
+
   describe '#value_is_truthy?' do
     context 'given truthy values' do
       ['true', 'TRuE', true, 1, '1', 'yes'].each do |truthy|

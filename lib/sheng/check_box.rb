@@ -10,6 +10,10 @@ module Sheng
       @element.xpath('.//w:name').first['w:val']
     end
 
+    def raw_key
+      key
+    end
+
     def interpolate(data_set)
       value = data_set.fetch(key)
       checked_attribute = @element.search('.//w:default').first.attribute('val')

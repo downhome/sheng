@@ -7,6 +7,12 @@ describe Sheng::MergeField do
     let(:fragment) { xml_fragment('input/merge_field/new_merge_field') }
     let(:element) { fragment.xpath("//w:instrText").first }
 
+    describe '#raw_key' do
+      it 'returns the mergefield name from the element' do
+        expect(subject.raw_key).to eq 'ocean.fishy'
+      end
+    end
+
     describe '#interpolate' do
       it 'interpolates values from dataset into mergefield' do
         dataset = Sheng::DataSet.new({

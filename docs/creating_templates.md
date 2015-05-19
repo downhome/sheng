@@ -82,7 +82,7 @@ And that's it!  Now that you know what a sample data set looks like, let's look 
 
 ## A JSON Reference Data Set
 
-The example above is great, but your developers will probably send you something a bit more "abstract" – a reference data set that reveals, by definition rather than example, what the values are you'll be working with.  Here's a sample reference data set that correlates to the example we've already seen:
+The example above is great, but your developers will probably send you something a bit more "abstract" – a reference data set that reveals, by definition rather than example, what values you'll be working with.  Here's a sample reference data set that correlates to the example we've already seen:
 
 ```
 {
@@ -104,7 +104,7 @@ The example above is great, but your developers will probably send you something
 }
 ```
 
-Hm.  That looks very familiar.  All the keys are the same, but the values are different.  Those values are placeholders that describe what **kind** of values you can expect to receive for that given key.  They're mostly intuitive, but here's a quick guide:
+That looks familiar, right?  All the keys are the same, but the values are different.  Those values are placeholders that describe what **kind** of values you can expect to receive for that given key.  They're mostly intuitive, but here's a quick guide:
 
 | Placeholder | Description | Example |
 | --- | --- | --- |
@@ -285,7 +285,7 @@ Wait, we snuck in something new there, didn't we?  That array of haunts – wher
 
 «start:classroom.students»
 
-Please welcome «first_name» «last_name» to our institution.  «pronoun|capitalize» is a wonderful addition!
+Please welcome «first_name» «last_name» to our institution.  «pronoun|capitalize» will be a wonderful addition!
 
 «end:classroom.students»
 

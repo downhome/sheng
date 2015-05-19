@@ -22,6 +22,18 @@ module Sheng
       merge_field_set = MergeFieldSet.new("#{key}_#{index}", new_node_set)
       member = { @start_field.iteration_variable => member } unless member.is_a?(Hash)
       merge_field_set.interpolate(DataSet.new(member))
+      if index == 0 || last
+        copy_section_formatting(new_node_set, side: last ? "end" : "start")
+      end
+    end
+
+    def copy_section_formatting(node_set, side:)
+      field = instance_variable_get(:"@#{side}_field")
+      if field.styling_paragraph && field.styling_paragraph.at_xpath(".//w:sectPr")
+        existing_ppr = node_set.at_xpath(".//w:pPr")
+        existing_ppr && existing_ppr.remove
+        node_set.first.prepend_child(field.styling_paragraph.dup)
+      end
     end
 
     def clean_up

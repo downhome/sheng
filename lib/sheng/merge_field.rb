@@ -45,6 +45,11 @@ module Sheng
       label
     end
 
+    def styling_paragraph
+      return nil if inline?
+      containing_element.at_xpath(".//w:pPr")
+    end
+
     def styling_run
       if new_style?
         separator_field = element.ancestors[1].at_xpath(".//w:fldChar[contains(@w:fldCharType, 'separate')]")

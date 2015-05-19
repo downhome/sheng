@@ -129,6 +129,19 @@ describe Sheng::Sequence do
       end
     end
 
+    context "with a sequence with section formatting" do
+      let(:fragment) { xml_fragment('input/sequence/sequence_with_section_formatting') }
+
+      it "copies section formatting from bracket mergefields to generated ends" do
+        dataset = Sheng::DataSet.new({
+          :countries => ["Tumbiblia", "Rofronco", "Beanipops", "Baab"]
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/sequence_with_section_formatting')
+      end
+    end
+
     context "with table-based sequences" do
       let(:fragment) { xml_fragment('input/sequence/sequence_in_table') }
 

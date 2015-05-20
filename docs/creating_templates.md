@@ -334,7 +334,7 @@ Using a sequence in a table is easy, but you must follow some specific rules for
 | Last Name | First Name | Favorite Juice | Smart? |
 | --- | --- | --- | --- |
 | «start:classroom.students» |   |   |   |
-| «last_name|upcase» | **«first_name»** | «fruit» juice | |
+| «last_name&#124;upcase» | **«first_name»** | «fruit» juice | `[x]`|
 | «end:classroom.students» |   |   |   |
 | _All students above are special, even if not smart._ |
 

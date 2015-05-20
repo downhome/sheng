@@ -4,13 +4,26 @@ module Sheng
     InstructionTextRegex = /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/
     KeyRegex = /^(start:|end:|if:|end_if:|unless:|end_unless:)?\s*([^\|\s]+)\s*\|?(.*)?/
 
-    class BadMergefieldError < StandardError; end
+    class NotAMergeFieldError < StandardError; end
+
+    class << self
+      def from_element(element)
+        new(element)
+      rescue NotAMergeFieldError => e
+        nil
+      end
+    end
 
     attr_reader :element, :xml_document
 
     def initialize(element)
       @element = element
       @xml_document = element.document
+      @instruction_text = mergefield_instruction_text
+    end
+
+    def ==(other)
+      other.is_a?(self.class) && other.element == element
     end
 
     def new_style?
@@ -31,18 +44,7 @@ module Sheng
     end
 
     def mergefield_instruction_text
-      return element['w:instr'] unless new_style?
-      current_element = element.parent.next_element
-      label = current_element.at_xpath(".//w:instrText").text
-      loop do
-        current_element = current_element.next_element
-        next if ["bookmarkStart", "bookmarkEnd"].include?(current_element.name)
-        label_part = current_element.at_xpath(".//w:instrText")
-        break unless label_part
-        label << label_part.text
-      end
-      raise BadMergefieldError.new(label) unless label.match(InstructionTextRegex)
-      label
+      Sheng::Support.extract_mergefield_instruction_text(element)
     end
 
     def styling_paragraph

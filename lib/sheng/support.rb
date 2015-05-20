@@ -32,6 +32,26 @@ module Sheng
         tag.namespace = xml_document.root.namespace_definitions.find { |ns| ns.prefix == "w" }
         tag
       end
+
+      def extract_mergefield_instruction_text(element)
+        if element.name == 'fldSimple'
+          label = element['w:instr']
+        else
+          current_element = element.parent.next_element
+          label = current_element.at_xpath(".//w:instrText").text
+          loop do
+            current_element = current_element.next_element
+            next if ["bookmarkStart", "bookmarkEnd"].include?(current_element.name)
+            label_part = current_element.at_xpath(".//w:instrText")
+            break unless label_part
+            label << label_part.text
+          end
+        end
+        unless label.match(MergeField::InstructionTextRegex)
+          raise MergeField::NotAMergeFieldError.new(label)
+        end
+        label
+      end
     end
   end
 end

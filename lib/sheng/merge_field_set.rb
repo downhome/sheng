@@ -76,9 +76,9 @@ module Sheng
         if element.xpath('.//w:checkBox').first
           CheckBox.new(element)
         else
-          MergeField.new(element)
+          MergeField.from_element(element)
         end
-      }
+      }.compact
     end
 
     def basic_node_elements

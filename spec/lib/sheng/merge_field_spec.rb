@@ -3,6 +3,30 @@ describe Sheng::MergeField do
   let(:element) { fragment.xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]").first }
   subject { described_class.new(element) }
 
+  describe ".from_element" do
+    it "returns a new MergeField for the given element" do
+      expect(described_class.from_element(element)).to eq(subject)
+    end
+
+    context "when given a new-style non-mergefield" do
+      let(:fragment) { xml_fragment('input/merge_field/bad/not_a_real_mergefield_new') }
+      let(:element) { fragment.xpath("//w:fldChar[contains(@w:fldCharType, 'begin')]").first }
+
+      it "returns nil" do
+        expect(described_class.from_element(element)).to be_nil
+      end
+    end
+
+    context "when given an old-style non-mergefield" do
+      let(:fragment) { xml_fragment('input/merge_field/bad/not_a_real_mergefield_old') }
+      let(:element) { fragment.xpath("//w:fldSimple").first }
+
+      it "returns nil" do
+        expect(described_class.from_element(element)).to be_nil
+      end
+    end
+  end
+
   describe "new style merge field" do
     let(:fragment) { xml_fragment('input/merge_field/new_merge_field') }
     let(:element) { fragment.xpath("//w:fldChar[contains(@w:fldCharType, 'begin')]").first }
@@ -65,12 +89,37 @@ describe Sheng::MergeField do
     describe "with badly formed mergefield tags" do
       let(:fragment) { xml_fragment('input/merge_field/bad/unclosed_merge_field') }
 
-      describe "#interpolate" do
+      describe ".new" do
         it "raises an exception" do
           expect {
-            subject.interpolate({})
-          }.to raise_error(described_class::BadMergefieldError, "MERGEFIELD  this_has_a_beginning_but_no_")
+            subject
+          }.to raise_error(described_class::NotAMergeFieldError, "MERGEFIELD  this_has_a_beginning_but_no_")
         end
+      end
+    end
+
+    context "when not an actual mergefield" do
+      let(:fragment) { xml_fragment('input/merge_field/bad/not_a_real_mergefield_new') }
+
+      describe ".new" do
+        it "raises an exception" do
+          expect {
+            subject
+          }.to raise_error(described_class::NotAMergeFieldError, "PAGE   \\* MERGEFORMAT ")
+        end
+      end
+    end
+  end
+
+  describe ".new" do
+    context "when not actually a mergefield" do
+      let(:fragment) { xml_fragment('input/merge_field/bad/not_a_real_mergefield_old') }
+      let(:element) { fragment.xpath("//w:fldSimple").first }
+
+      it "raises an exception" do
+        expect {
+          subject
+        }.to raise_error(described_class::NotAMergeFieldError, " PAGE  \\* MERGEFORMAT ")
       end
     end
   end

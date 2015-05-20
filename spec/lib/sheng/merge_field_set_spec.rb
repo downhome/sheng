@@ -11,6 +11,17 @@ describe Sheng::MergeFieldSet do
       subject.interpolate(:the_data_set)
     end
 
+    context "with fields that are not valid mergefields" do
+      let(:fragment) { xml_fragment('input/merge_field_set/with_non_mergefield_fields') }
+
+      it "ignores the non-mergefield fields and interpolates the rest" do
+        dataset = Sheng::DataSet.new({ :color => "browns" })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_fragment).to be_equivalent_to xml_fragment('output/merge_field_set/with_non_mergefield_fields')
+      end
+    end
+
     it 'returns expected interpolated fragment' do
       dataset = Sheng::DataSet.new({
         :person => {

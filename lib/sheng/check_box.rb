@@ -1,9 +1,10 @@
 module Sheng
   class CheckBox
-    attr_reader :element
+    attr_reader :element, :xml_document
 
     def initialize(element = nil)
       @element = element
+      @xml_document = element.document
     end
 
     def key

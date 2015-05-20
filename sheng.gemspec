@@ -6,10 +6,10 @@ require 'sheng/version'
 Gem::Specification.new do |spec|
   spec.name          = "sheng"
   spec.version       = Sheng::VERSION
-  spec.authors       = ["projectdx"]
-  spec.email         = [""]
-  spec.description   = "Gem for replacing mergefields at .docx"
-  spec.summary       = "Gem for replacing mergefields at .docx"
+  spec.authors       = ["Ravi Gadad", "Maher Hawash"]
+  spec.email         = ["ravi@renewfund.com"]
+  spec.description   = "A Ruby gem for data merging Word documents."
+  spec.summary       = "A Ruby gem for data merging Word documents, using native MergeFields as placeholders in templates, and a Ruby hash as the data set for substitution."
   spec.homepage      = ""
   spec.license       = "MIT"
 

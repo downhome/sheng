@@ -19,7 +19,7 @@ Or install it yourself as:
 ## Quick Start
 
 #### 1. Create Your Template
-Follow the instructions in [creating_templates.docx](https://github.com/projectdx/sheng/raw/master/docs/creating_templates.docx) (there's also a Markdown version here: [creating_templates.md](docs/creating_templates.md), but it obviously doesn't have example mergefields in it like the `docx` file does, so we recommend the `docx` file).  Store the template you created somewhere in the filesystem where you'll have access to it from your Ruby app.
+Follow the instructions in [creating_templates.docx](https://github.com/renewablefunding/sheng/raw/master/docs/creating_templates.docx) (there's also a Markdown version here: [creating_templates.md](docs/creating_templates.md), but it obviously doesn't have example mergefields in it like the `docx` file does, so we recommend the `docx` file).  Store the template you created somewhere in the filesystem where you'll have access to it from your Ruby app.
 
 #### 2. Generate a Data Set Hash
 In your application, generate a data set Hash (see [the relevant section in the creation instructions](docs/creating_templates.md#the-data-set) to learn what a data set should look like); for the purposes of these instructions, we'll assume you stored that Hash in a variable called `data_set`.

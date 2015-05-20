@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "pry"
   spec.add_development_dependency "simplecov"
 
-  spec.add_dependency "nokogiri"
-  spec.add_dependency "rubyzip", "1.1.0"
-  spec.add_dependency 'activesupport'
+  spec.add_dependency "nokogiri", "~> 1.6"
+  spec.add_dependency "rubyzip", "~> 1.1.1"
+  spec.add_dependency "activesupport", "~> 4.2"
 end

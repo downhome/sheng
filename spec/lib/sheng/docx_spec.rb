@@ -95,10 +95,9 @@ describe Sheng::Docx do
 
   describe '#new' do
     it "should raise an error if zip file not found" do
-      allow(Zip::File).to receive(:new).with('crazy_path').and_raise(Zip::ZipError)
       expect {
-        described_class.new('crazy_path', {})
-      }.to raise_error(described_class::InvalidFile, "Zip::ZipError")
+        described_class.new('definitely/not/a/real/path', {})
+      }.to raise_error(described_class::InvalidFile, "File definitely/not/a/real/path not found")
     end
 
     it "should raise an ArgumentError if params is not a hash" do

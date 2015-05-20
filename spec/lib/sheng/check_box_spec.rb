@@ -3,6 +3,12 @@ describe Sheng::CheckBox do
   let(:element) { fragment.at_xpath(".//w:checkBox/..") }
   subject { described_class.new(element) }
 
+  describe ".from_element" do
+    it "returns a new instance with the given element" do
+      expect(described_class.from_element(element)).to eq(subject)
+    end
+  end
+
   describe '#key' do
     it 'returns w:val attribute of w:name node in xml fragment' do
       expect(subject.key).to eq 'goats'

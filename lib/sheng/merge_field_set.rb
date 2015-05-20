@@ -74,7 +74,7 @@ module Sheng
     def basic_nodes
       basic_node_elements.map { |element|
         if element.xpath('.//w:checkBox').first
-          CheckBox.new(element)
+          CheckBox.from_element(element)
         else
           MergeField.from_element(element)
         end

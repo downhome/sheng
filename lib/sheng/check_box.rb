@@ -2,9 +2,19 @@ module Sheng
   class CheckBox
     attr_reader :element, :xml_document
 
+    class << self
+      def from_element(element)
+        new(element)
+      end
+    end
+
     def initialize(element = nil)
       @element = element
       @xml_document = element.document
+    end
+
+    def ==(other)
+      other.is_a?(self.class) && other.element == element
     end
 
     def key

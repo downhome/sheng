@@ -16,11 +16,11 @@ module Sheng
 
     def extract_mergefields(fragment)
       if fragment.name == "fldSimple"
-        return [MergeField.new(fragment)]
+        return [MergeField.from_element(fragment)].compact
       end
       fragment.xpath(".//#{mergefield_element_path}|.//#{new_mergefield_element_path}").map do |field_simple|
         unless field_simple.at('.//w:checkBox')
-          MergeField.new(field_simple)
+          MergeField.from_element(field_simple)
         end
       end.compact
     end

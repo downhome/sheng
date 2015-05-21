@@ -175,6 +175,23 @@ describe Sheng::Sequence do
         expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/embedded_sequence')
       end
     end
+
+    context "with non-mergefield fields in the repeating block" do
+      let(:fragment) { xml_fragment('input/sequence/sequence_with_misleading_fields') }
+      let(:element) { fragment.xpath("//w:fldChar[contains(@w:fldCharType, 'begin')]").first }
+
+      it "ignores the non-mergefields fldchars" do
+        dataset = Sheng::DataSet.new({
+          :castles => [
+            { :color => 'browns' },
+            { :color => 'totally rad' }
+          ]
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/sequence/sequence_with_misleading_fields')
+      end
+    end
   end
 
   describe '#new' do

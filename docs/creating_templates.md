@@ -223,6 +223,20 @@ Filters can also be chained, and will be applied in which they appear (from left
 
 «a_basic_integer|downcase»
 
+## Basic Arithmetic Operations
+
+You can perform basic arithmetic operations within a mergefield, using either hardcoded numeric values or variable names.  The operators allowed are + (addition), - (subtraction), * (multiplication), and / (division).  The usual order of precedence applies with these operators, and you can use parenthesis to control that precedence.
+
+### Examples:
+
+«25 * 6»
+
+«8.3 + 5.232»
+
+«(2.1 + 5) * 18»
+
+«(hair.length * 2) + head.height»
+
 # Checkboxes
 
 To create a checkbox:

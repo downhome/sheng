@@ -27,6 +27,25 @@ describe Sheng::MergeField do
     end
   end
 
+  describe "mergefield with math operations" do
+    let(:fragment) { xml_fragment('input/merge_field/math_merge_field') }
+    let(:element) { fragment.xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]").first }
+
+    describe '#interpolate' do
+      it 'interpolates values from dataset into mergefield' do
+        dataset = Sheng::DataSet.new({
+          :baskets => {
+            :count => 2
+          },
+          :origami => 8
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/math_merge_field')
+      end
+    end
+  end
+
   describe "new style merge field" do
     let(:fragment) { xml_fragment('input/merge_field/new_merge_field') }
     let(:element) { fragment.xpath("//w:fldChar[contains(@w:fldCharType, 'begin')]").first }
@@ -124,15 +143,69 @@ describe Sheng::MergeField do
     end
   end
 
+  describe "#get_value" do
+    let(:dataset) {
+      Sheng::DataSet.new({
+        :ocean => { :fishy => "scrumblefish" },
+        :numbers => { :first => 23, :second => 8 }
+      })
+    }
+
+    it "returns value from dataset when given simple lookup" do
+      allow(subject).to receive(:key).and_return("ocean.fishy")
+      expect(subject.get_value(dataset)).to eq("scrumblefish")
+    end
+
+    it "performs math operations on values from dataset" do
+      allow(subject).to receive(:key).and_return("(numbers.first * numbers.second) + 5")
+      expect(subject.get_value(dataset)).to eq(189)
+    end
+
+    it "performs math operations with no dataset lookup" do
+      allow(subject).to receive(:key).and_return("2 + (3*5)")
+      expect(subject.get_value(dataset)).to eq(17)
+    end
+
+    it "raises exception if key not found in simple lookup" do
+      allow(subject).to receive(:key).and_return("oliver.twist")
+      expect {
+        subject.get_value(dataset)
+      }.to raise_error(Sheng::DataSet::KeyNotFound)
+    end
+
+    it "raises exception if key not found in math formula" do
+      allow(subject).to receive(:key).and_return("oliver.twist * 15")
+      expect {
+        subject.get_value(dataset)
+      }.to raise_error(Sheng::DataSet::KeyNotFound)
+    end
+
+    it "raises exception if interpolated math formula includes invalid symbols" do
+      allow(subject).to receive(:key).and_return("ocean.fishy * 15")
+      expect {
+        subject.get_value(dataset)
+      }.to raise_error(Dentaku::UnboundVariableError)
+    end
+  end
+
   describe '#interpolate' do
     it 'interpolates filtered values from dataset into mergefield' do
-      dataset = Sheng::DataSet.new({
-        :ocean => { :fishy => "scrumblefish" }
-      })
-
+      allow(subject).to receive(:get_value).with(:a_dataset).and_return("scrumblefish")
       allow(subject).to receive(:filter_value).with("scrumblefish").and_return("l33tphish")
-      subject.interpolate(dataset)
+      subject.interpolate(:a_dataset)
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/merge_field')
+    end
+
+    it "does not replace and returns nil if any keys not found" do
+      allow(subject).to receive(:get_value).with(:a_dataset).and_raise(Sheng::DataSet::KeyNotFound)
+      expect(subject).to receive(:replace_mergefield).never
+      expect(subject.interpolate(:a_dataset)).to be_nil
+    end
+
+    it "does not replace and returns nil if calculation error encountered" do
+      allow(subject).to receive(:get_value).with(:a_dataset).and_raise(Dentaku::UnboundVariableError.new([]))
+      expect(subject).to receive(:replace_mergefield).never
+      expect(subject.interpolate(:a_dataset)).to be_nil
     end
   end
 
@@ -148,6 +221,20 @@ describe Sheng::MergeField do
     end
   end
 
+  describe "#required_variables" do
+    it "returns key parts that are not operators or numeric" do
+      allow(subject).to receive(:key).and_return("cat.toes   * 15 + (yawns / 2.0)")
+      expect(subject.required_variables).to eq(["cat.toes", "yawns"])
+    end
+  end
+
+  describe "#key_parts" do
+    it "returns key split on all word boundaries except dot separators" do
+      allow(subject).to receive(:key).and_return("cat.toes   * 15 + (yawns / 2.0)")
+      expect(subject.key_parts).to eq(["cat.toes", "*", "15", "+", "(", "yawns", "/", "2.0", ")"])
+    end
+  end
+
   describe '#key' do
     it 'returns the raw key with start/end metadata stripped off' do
       allow(subject).to receive(:raw_key).and_return('start:whipple.dooter')
@@ -159,6 +246,11 @@ describe Sheng::MergeField do
     it 'returns the raw key with filters stripped off' do
       allow(subject).to receive(:raw_key).and_return("whumpies | cook | dress(frock)")
       expect(subject.key).to eq 'whumpies'
+    end
+
+    it 'returns key even if it contains math operations' do
+      allow(subject).to receive(:raw_key).and_return("whumpies * 3 | cook | dress(frock)")
+      expect(subject.key).to eq 'whumpies * 3'
     end
   end
 

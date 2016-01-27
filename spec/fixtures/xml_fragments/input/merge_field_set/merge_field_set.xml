@@ -55,6 +55,32 @@
     </w:fldSimple>
   </w:p>
   <w:p>
+    <w:r>
+      <w:t xml:space="preserve">Sock Area: </w:t>
+    </w:r>
+    <w:fldSimple w:instr=" MERGEFIELD dimensions.width * dimensions.height \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«dimensions.width * dimensions.height»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">Sock Circumference: </w:t>
+    </w:r>
+    <w:fldSimple w:instr=" MERGEFIELD (dimensions.width * 2) + (dimensions.height * 2) \* MERGEFORMAT ">
+      <w:r>
+        <w:rPr>
+          <w:noProof/>
+        </w:rPr>
+        <w:t>«(dimensions.width * 2) + (dimensions.height * 2)»</w:t>
+      </w:r>
+    </w:fldSimple>
+  </w:p>
+  <w:p>
     <w:fldSimple w:instr=" MERGEFIELD end:person.socks \* MERGEFORMAT ">
       <w:r w:rsidR="00455C8A">
         <w:rPr>

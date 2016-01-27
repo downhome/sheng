@@ -28,8 +28,8 @@ describe Sheng::MergeFieldSet do
           :first_name => 'Brad',
           :last_name => 'Tucklemoof',
           :socks => [
-            { :color => 'Green', :size => 'Stumungous' },
-            { :color => 'Whitish', :size => 'Teensy' }
+            { :color => 'Green', :size => 'Stumungous', :dimensions => { :width => 14, :height => 5 } },
+            { :color => 'Whitish', :size => 'Teensy', :dimensions => { :width => 28, :height => 13 } }
           ]
         },
         :veggies => { :green => { :spinach => true } }
@@ -117,15 +117,49 @@ describe Sheng::MergeFieldSet do
   describe '#required_hash' do
     it 'returns skeleton hash demonstrating required data for interpolation' do
       expect(subject.required_hash).to eq({
-        "person" => { "first_name" => nil, "last_name" => nil, "socks" => [{"color"=>nil, "size"=>nil}] },
-        "veggies"=> { "green" => { "spinach" => nil } }
+        "person" => {
+          "first_name" => nil,
+          "last_name" => nil,
+          "socks" => [
+            {
+              "color" => nil,
+              "size" => nil,
+              "dimensions" => {
+                "width" => nil,
+                "height" => nil
+              }
+            }
+          ]
+        },
+        "veggies"=> {
+          "green" => {
+            "spinach" => nil
+          }
+        }
       })
     end
 
     it 'uses given value as placeholder for mergefields/checkboxes' do
       expect(subject.required_hash(:foo)).to eq({
-        "person" => { "first_name" => :foo, "last_name" => :foo, "socks" => [{"color"=>:foo, "size"=>:foo}] },
-        "veggies"=> { "green" => { "spinach" => :foo } }
+        "person" => {
+          "first_name" => :foo,
+          "last_name" => :foo,
+          "socks" => [
+            {
+              "color" => :foo,
+              "size" => :foo,
+              "dimensions" => {
+                "width" => :foo,
+                "height" => :foo
+              }
+            }
+          ]
+        },
+        "veggies"=> {
+          "green" => {
+            "spinach" => :foo
+          }
+        }
       })
     end
 

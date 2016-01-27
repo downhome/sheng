@@ -47,7 +47,7 @@ module Sheng
             label << label_part.text
           end
         end
-        unless label.match(MergeField::InstructionTextRegex)
+        unless label.match(MergeField::REGEXES[:instruction_text])
           raise MergeField::NotAMergeFieldError.new(label)
         end
         label

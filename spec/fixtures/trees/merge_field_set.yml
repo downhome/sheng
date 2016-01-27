@@ -10,6 +10,10 @@
     :key: color
   - :type: merge_field
     :key: size
+  - :type: merge_field
+    :key: dimensions.width * dimensions.height
+  - :type: merge_field
+    :key: (dimensions.width * 2) + (dimensions.height * 2)
 - :type: check_box
   :key: veggies.green.spinach
 - :type: merge_field

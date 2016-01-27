@@ -36,6 +36,8 @@ module Sheng
       nodes.inject({}) do |node_list, node|
         hsh = if node.is_a?(ConditionalBlock)
           node.required_hash(placeholder)
+        elsif node.is_a?(MergeField)
+          node.required_hash(placeholder: placeholder)
         else
           value = node.is_a?(Block) ? [node.required_hash(placeholder)].compact : placeholder
           key_parts = node.key.split(/\./)

@@ -38,6 +38,28 @@
   </w:p>
   <w:p>
     <w:r>
+      <w:t xml:space="preserve">Sock Area: </w:t>
+    </w:r>
+    <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
+      <w:t>70</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">Sock Circumference: </w:t>
+    </w:r>
+    <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
+      <w:t>38</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
       <w:rPr>
         <w:noProof/>
       </w:rPr>
@@ -50,6 +72,28 @@
         <w:noProof/>
       </w:rPr>
       <w:t>Teensy</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">Sock Area: </w:t>
+    </w:r>
+    <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
+      <w:t>364</w:t>
+    </w:r>
+  </w:p>
+  <w:p>
+    <w:r>
+      <w:t xml:space="preserve">Sock Circumference: </w:t>
+    </w:r>
+    <w:r>
+      <w:rPr>
+        <w:noProof/>
+      </w:rPr>
+      <w:t>82</w:t>
     </w:r>
   </w:p>
   <w:ffData>

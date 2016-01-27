@@ -1,8 +1,14 @@
+require "dentaku"
+
 module Sheng
   class MergeField
-    AllowedFilters = [:upcase, :downcase, :capitalize, :titleize, :reverse]
-    InstructionTextRegex = /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/
-    KeyRegex = /^(start:|end:|if:|end_if:|unless:|end_unless:)?\s*([^\|\s]+)\s*\|?(.*)?/
+    MATH_TOKENS = %w[+ - / * ( )]
+    REGEXES = {
+      instruction_text: /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/,
+      key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/,
+      numeric_string: /^[-+]?[0-9]*\.?[0-9]+$/
+    }
+    ALLOWED_FILTERS = [:upcase, :downcase, :capitalize, :titleize, :reverse]
 
     class NotAMergeFieldError < StandardError; end
 
@@ -31,16 +37,16 @@ module Sheng
     end
 
     def key
-      raw_key.gsub(KeyRegex, '\2')
+      raw_key.match(REGEXES[:key_string])[:key].strip
     end
 
     def filters
-      match = raw_key.match(KeyRegex)
-      match.captures[2].split("|").map(&:strip)
+      match = raw_key.match(REGEXES[:key_string])
+      match[:filters].split("|").map(&:strip)
     end
 
     def raw_key
-      @raw_key ||= mergefield_instruction_text.gsub(InstructionTextRegex, '\1').strip
+      @raw_key ||= mergefield_instruction_text.gsub(REGEXES[:instruction_text], '\1').strip
     end
 
     def mergefield_instruction_text
@@ -84,7 +90,7 @@ module Sheng
 
     def block_prefix
       @potential_prefix ||= begin
-        potential_prefix = raw_key.match(KeyRegex).captures[0]
+        potential_prefix = raw_key.match(REGEXES[:key_string])[:prefix]
         potential_prefix && potential_prefix.gsub(/\:$/, '')
       end
     end
@@ -185,10 +191,55 @@ module Sheng
       xml.remove
     end
 
+    def key_parts
+      @key_parts ||= key.gsub(".", "_DOTSEPARATOR_").
+        split(/\b|\s/).
+        map(&:strip).
+        reject(&:empty?).
+        map { |token|
+          token.gsub("_DOTSEPARATOR_", ".")
+        }
+    end
+
+    def required_variables
+      key_parts.reject { |token|
+        REGEXES[:numeric_string].match(token) || MATH_TOKENS.include?(token)
+      }
+    end
+
+    def required_hash(placeholder: nil)
+      required_variables.inject({}) { |assembled, variable|
+        parts = variable.split(/\./)
+        last_key = parts.pop
+        hash = parts.reverse.inject(last_key => placeholder) do |memo, key|
+          memo = { key => memo }; memo
+        end
+        Sheng::Support.merge_required_hashes(assembled, hash)
+      }
+    end
+
+    def key_has_math?
+      !(MATH_TOKENS & key_parts).empty?
+    end
+
+    def get_value(data_set)
+      interpolated_string = key_parts.map { |token|
+        if REGEXES[:numeric_string].match(token) || MATH_TOKENS.include?(token)
+          token
+        else
+          data_set.fetch(token)
+        end
+      }.join(" ")
+
+      return interpolated_string unless key_has_math?
+
+      Dentaku::Calculator.new.evaluate!(interpolated_string)
+    end
+
     def interpolate(data_set)
-      value = data_set.fetch(key)
+      value = get_value(data_set)
       replace_mergefield(filter_value(value))
-    rescue DataSet::KeyNotFound
+    rescue DataSet::KeyNotFound, Dentaku::UnboundVariableError
       # Ignore this error; we'll collect all uninterpolated fields later and
       # raise a new exception, so we can list all the fields in an error
       # message.
@@ -197,7 +248,7 @@ module Sheng
 
     def filter_value(value)
       filters.inject(value) { |val, filter|
-        if AllowedFilters.include?(filter.to_sym) && val.respond_to?(filter.to_sym)
+        if ALLOWED_FILTERS.include?(filter.to_sym) && val.respond_to?(filter.to_sym)
           val.send(filter)
         else
           val

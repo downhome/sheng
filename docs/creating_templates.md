@@ -18,6 +18,7 @@ Note that any instructions on how specifically to use certain commands in Word a
   * [Basic MergeField Substitution](#basic-mergefield-substitution)
     * [Inline Basic MergeFields](#inline-basic-mergefields)
     * [Filters on String Values](#filters-on-string-values)
+    * [Basic Arithmetic Operations](#basic-arithmetic-operations)
   * [Checkboxes](#checkboxes)
   * [Sequences](#sequences)
     * [Arrays of Primitives](#arrays-of-primitives)

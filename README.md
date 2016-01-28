@@ -1,5 +1,7 @@
 # Sheng
 
+[![Build Status](https://travis-ci.org/renewablefunding/sheng.svg?branch=master)](https://travis-ci.org/renewablefunding/sheng)
+
 A Ruby gem for data merging Word documents.  Given a set of data (as a Hash), and a `.docx` template created in [a specific way](docs/creating_templates.md), you can generate a new Word document with the values from the data substituted in place.
 
 ## Installation

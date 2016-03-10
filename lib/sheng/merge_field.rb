@@ -25,7 +25,7 @@ module Sheng
     def initialize(element)
       @element = element
       @xml_document = element.document
-      @instruction_text = mergefield_instruction_text
+      @instruction_text = Sheng::Support.extract_mergefield_instruction_text(element)
     end
 
     def ==(other)
@@ -46,11 +46,7 @@ module Sheng
     end
 
     def raw_key
-      @raw_key ||= mergefield_instruction_text.gsub(REGEXES[:instruction_text], '\1').strip
-    end
-
-    def mergefield_instruction_text
-      Sheng::Support.extract_mergefield_instruction_text(element)
+      @raw_key ||= @instruction_text.gsub(REGEXES[:instruction_text], '\1').strip
     end
 
     def styling_paragraph

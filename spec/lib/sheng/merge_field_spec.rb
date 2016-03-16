@@ -27,6 +27,22 @@ describe Sheng::MergeField do
     end
   end
 
+  describe "mergefield with math and currency formatting" do
+    let(:fragment) { xml_fragment('input/merge_field/currency_merge_field') }
+    let(:element) { fragment.xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]").first }
+
+    describe '#interpolate' do
+      it 'interpolates values from dataset into mergefield' do
+        dataset = Sheng::DataSet.new({
+          :robots => 3
+        })
+
+        subject.interpolate(dataset)
+        expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/currency_merge_field')
+      end
+    end
+  end
+
   describe "mergefield with math operations" do
     let(:fragment) { xml_fragment('input/merge_field/math_merge_field') }
     let(:element) { fragment.xpath("//w:fldSimple[contains(@w:instr, 'MERGEFIELD')]").first }

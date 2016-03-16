@@ -32,4 +32,22 @@ describe Sheng::Support do
       expect(described_class.is_numeric?("foobar")).to be false
     end
   end
+
+  describe ".typecast_numeric" do
+    it "returns given numeric" do
+      expect(described_class.typecast_numeric(123.4)).to eq(123.4)
+    end
+
+    it "returns given non-numeric string" do
+      expect(described_class.typecast_numeric("foobar")).to eq("foobar")
+    end
+
+    it "returns numeric version of integer string" do
+      expect(described_class.typecast_numeric("123")).to eq(123)
+    end
+
+    it "returns numeric version of decimal string" do
+      expect(described_class.typecast_numeric("123.4")).to eq(123.4)
+    end
+  end
 end

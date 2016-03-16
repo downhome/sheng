@@ -207,6 +207,13 @@ describe Sheng::MergeField do
       expect(subject).to receive(:replace_mergefield).never
       expect(subject.interpolate(:a_dataset)).to be_nil
     end
+
+    it "does not replace and returns nil if unsupported filter requested" do
+      allow(subject).to receive(:get_value).with(:a_dataset).and_return(:got_value)
+      allow(subject).to receive(:filter_value).with(:got_value).and_raise(Sheng::Filters::UnsupportedFilterError)
+      expect(subject).to receive(:replace_mergefield).never
+      expect(subject.interpolate(:a_dataset)).to be_nil
+    end
   end
 
   describe "#xml" do
@@ -314,44 +321,29 @@ describe Sheng::MergeField do
   end
 
   describe "#filter_value" do
-    it "can upcase" do
-      allow(subject).to receive(:filters).and_return(["upcase"])
-      expect(subject.filter_value("HorSes")).to eq("HORSES")
-    end
-
-    it "can downcase" do
-      allow(subject).to receive(:filters).and_return(["downcase"])
-      expect(subject.filter_value("HorSes")).to eq("horses")
-    end
-
-    it "can reverse" do
-      allow(subject).to receive(:filters).and_return(["reverse"])
-      expect(subject.filter_value("Maple")).to eq("elpaM")
-    end
-
-    it "can titleize" do
-      allow(subject).to receive(:filters).and_return(["titleize"])
-      expect(subject.filter_value("ribbons are grand")).to eq("Ribbons Are Grand")
-    end
-
-    it "can capitalize" do
-      allow(subject).to receive(:filters).and_return(["capitalize"])
-      expect(subject.filter_value("ribbons are grand")).to eq("Ribbons are grand")
+    it "looks up filter and returns filtered result" do
+      filter_double = instance_double(Sheng::Filters::Base)
+      allow(subject).to receive(:filters).and_return(["foo"])
+      allow(Sheng::Filters).to receive(:filter_for).with("foo").
+        and_return(filter_double)
+      allow(filter_double).to receive(:filter).with("HorSes").
+        and_return("ponies")
+      expect(subject.filter_value("HorSes")).to eq("ponies")
     end
 
     it "works with multiple filters" do
-      allow(subject).to receive(:filters).and_return(["reverse", "capitalize"])
-      expect(subject.filter_value("maple")).to eq("Elpam")
-    end
-
-    it "does nothing if filter not recognized" do
-      allow(subject).to receive(:filters).and_return(["elephantize"])
-      expect(subject.filter_value("ribbons are grand")).to eq("ribbons are grand")
-    end
-
-    it "does nothing if value doesn't respond to filter" do
-      allow(subject).to receive(:filters).and_return(["upcase"])
-      expect(subject.filter_value(130)).to eq(130)
+      filter1_double = instance_double(Sheng::Filters::Base)
+      filter2_double = instance_double(Sheng::Filters::Base)
+      allow(subject).to receive(:filters).and_return(["foo", "bar"])
+      allow(Sheng::Filters).to receive(:filter_for).with("foo").
+        and_return(filter1_double)
+      allow(Sheng::Filters).to receive(:filter_for).with("bar").
+        and_return(filter2_double)
+      allow(filter1_double).to receive(:filter).with("HorSes").
+        and_return("ponies")
+      allow(filter2_double).to receive(:filter).with("ponies").
+        and_return("Scuba Gear")
+      expect(subject.filter_value("HorSes")).to eq("Scuba Gear")
     end
   end
 

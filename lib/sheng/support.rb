@@ -58,6 +58,16 @@ module Sheng
       def is_numeric?(value)
         value.is_a?(Numeric) || !!NUMERIC_REGEX.match(value)
       end
+
+      def typecast_numeric(value)
+        return value if value.is_a?(Numeric) || !NUMERIC_REGEX.match(value)
+        val = value.gsub(",", "").to_d
+        if val.frac == 0
+          val.to_i
+        else
+          val
+        end
+      end
     end
   end
 end

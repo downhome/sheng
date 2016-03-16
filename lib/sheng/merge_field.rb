@@ -7,7 +7,6 @@ module Sheng
       instruction_text: /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/,
       key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/
     }
-    ALLOWED_FILTERS = [:upcase, :downcase, :capitalize, :titleize, :reverse]
 
     class NotAMergeFieldError < StandardError; end
 
@@ -234,7 +233,7 @@ module Sheng
     def interpolate(data_set)
       value = get_value(data_set)
       replace_mergefield(filter_value(value))
-    rescue DataSet::KeyNotFound, Dentaku::UnboundVariableError
+    rescue DataSet::KeyNotFound, Dentaku::UnboundVariableError, Filters::UnsupportedFilterError
       # Ignore this error; we'll collect all uninterpolated fields later and
       # raise a new exception, so we can list all the fields in an error
       # message.
@@ -242,12 +241,9 @@ module Sheng
     end
 
     def filter_value(value)
-      filters.inject(value) { |val, filter|
-        if ALLOWED_FILTERS.include?(filter.to_sym) && val.respond_to?(filter.to_sym)
-          val.send(filter)
-        else
-          val
-        end
+      filters.inject(value) { |val, filter_string|
+        filterer = Filters.filter_for(filter_string)
+        filterer.filter(val)
       }
     end
   end

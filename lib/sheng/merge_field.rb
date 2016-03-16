@@ -178,15 +178,22 @@ module Sheng
     end
 
     def replace_mergefield(value)
+      value_as_string = if value.is_a?(BigDecimal)
+        value.to_s("F")
+      else
+        value.to_s
+      end
+
       new_run = Sheng::Support.new_text_run(
-        value, xml_document: xml_document, style_run: styling_run
+        value_as_string, xml_document: xml_document, style_run: styling_run
       )
       xml.before(new_run)
       xml.remove
     end
 
     def key_parts
-      @key_parts ||= key.gsub(".", "_DOTSEPARATOR_").
+      @key_parts ||= key.gsub(",", "").
+        gsub(".", "_DOTSEPARATOR_").
         split(/\b|\s/).
         map(&:strip).
         reject(&:empty?).
@@ -227,7 +234,7 @@ module Sheng
 
       return interpolated_string unless key_has_math?
 
-      Dentaku::Calculator.new.evaluate!(interpolated_string)
+      Dentaku::Calculator.new.evaluate!(interpolated_string.gsub(",", ""))
     end
 
     def interpolate(data_set)

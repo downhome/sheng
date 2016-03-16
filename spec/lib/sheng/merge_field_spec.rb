@@ -35,9 +35,9 @@ describe Sheng::MergeField do
       it 'interpolates values from dataset into mergefield' do
         dataset = Sheng::DataSet.new({
           :baskets => {
-            :count => 2
+            :count => "2,300.40"
           },
-          :origami => 8
+          :origami => 8.5
         })
 
         subject.interpolate(dataset)
@@ -157,8 +157,8 @@ describe Sheng::MergeField do
     end
 
     it "performs math operations on values from dataset" do
-      allow(subject).to receive(:key).and_return("(numbers.first * numbers.second) + 5")
-      expect(subject.get_value(dataset)).to eq(189)
+      allow(subject).to receive(:key).and_return("(numbers.first * numbers.second) + 5.3")
+      expect(subject.get_value(dataset)).to eq(189.3)
     end
 
     it "performs math operations with no dataset lookup" do

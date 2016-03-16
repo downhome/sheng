@@ -5,8 +5,7 @@ module Sheng
     MATH_TOKENS = %w[+ - / * ( )]
     REGEXES = {
       instruction_text: /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/,
-      key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/,
-      numeric_string: /^[-+]?[0-9]*\.?[0-9]+$/
+      key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/
     }
     ALLOWED_FILTERS = [:upcase, :downcase, :capitalize, :titleize, :reverse]
 
@@ -199,7 +198,7 @@ module Sheng
 
     def required_variables
       key_parts.reject { |token|
-        REGEXES[:numeric_string].match(token) || MATH_TOKENS.include?(token)
+        Support.is_numeric?(token) || MATH_TOKENS.include?(token)
       }
     end
 
@@ -220,7 +219,7 @@ module Sheng
 
     def get_value(data_set)
       interpolated_string = key_parts.map { |token|
-        if REGEXES[:numeric_string].match(token) || MATH_TOKENS.include?(token)
+        if Support.is_numeric?(token) || MATH_TOKENS.include?(token)
           token
         else
           data_set.fetch(token)

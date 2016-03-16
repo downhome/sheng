@@ -19,3 +19,5 @@ module Sheng
 end
 
 require_relative "filters/string_filter"
+require_relative "filters/numeric_filter"
+require_relative "filters/currency_formatting_filter"

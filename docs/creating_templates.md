@@ -18,6 +18,7 @@ Note that any instructions on how specifically to use certain commands in Word a
   * [Basic MergeField Substitution](#basic-mergefield-substitution)
     * [Inline Basic MergeFields](#inline-basic-mergefields)
     * [Filters on String Values](#filters-on-string-values)
+    * [Filters on Numeric Values](#filters-on-numeric-values)
     * [Basic Arithmetic Operations](#basic-arithmetic-operations)
   * [Checkboxes](#checkboxes)
   * [Sequences](#sequences)
@@ -224,9 +225,31 @@ Filters can also be chained, and will be applied in which they appear (from left
 
 «a_basic_integer|downcase»
 
+## Filters on Numeric Values
+
+There are also built-in filters available for modifying the output of numeric values (e.g. to round a number or display it as currency).  These filters, if used on non-numeric values, will have no effect.  Strings that can be read as numeric values (like "145.2") will work with these filters.  Unlike the string filters, these numeric filters can accept arguments, to clarify what the filter should do.  The filters are:
+
+| Name | Description | Example Input | Example Command | Example Output |
+| --- | --- | --- | --- | --- |
+| round(n) | Rounds number to n decimal places | 2360.7853 | round(2) | 2360.79 |
+| floor | Truncates decimal portion of number | 2360.7853 | floor | 2360 |
+| currency(x) | Formats number as currency (2 fixed decimals, thousands separator), prepending optional argument | 149020.5 | currency($) | $149,020.50 |
+
+Filters can also be chained, and will be applied in which they appear (from left to right).
+
+### Examples:
+
+«a_basic_float|round(1)»
+
+«a_basic_float|currency($)»
+
+«a_basic_float|floor»
+
 ## Basic Arithmetic Operations
 
 You can perform basic arithmetic operations within a mergefield, using either hardcoded numeric values or variable names.  The operators allowed are + (addition), - (subtraction), * (multiplication), and / (division).  The usual order of precedence applies with these operators, and you can use parenthesis to control that precedence.
+
+Note, however, that adding formatted numbers (like "1,400.50" and "24,000.20") will result in an unformatted number ("25400.7"), so if you want currency formatting or rounding, you'll want to use the numeric formatting methods shown above.  You can combine arithmetic with filters to accomplish this, as seen in the last example below.
 
 ### Examples:
 
@@ -237,6 +260,8 @@ You can perform basic arithmetic operations within a mergefield, using either ha
 «(2.1 + 5) * 18»
 
 «(hair.length * 2) + head.height»
+
+«principal + interest | currency($)»
 
 # Checkboxes
 

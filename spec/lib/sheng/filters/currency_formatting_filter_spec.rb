@@ -9,10 +9,10 @@ describe Sheng::Filters::CurrencyFormattingFilter do
 
   it_behaves_like "a filter", test_cases
 
-  context "with value that does not respond to method" do
+  context "with non-numeric value" do
     describe "#filter" do
       it "returns unmodified value" do
-        subject = described_class.new(method: :round)
+        subject = described_class.new(method: :currency)
         expect(subject.filter("apples")).to eq("apples")
       end
     end

@@ -1,6 +1,8 @@
 module Sheng
   module Support
     class << self
+      NUMERIC_REGEX = /^(0|[1-9][0-9]*|[1-9][0-9]{0,2}(,[0-9]{3,3})*)(\.[0-9]+)?$/
+
       def merge_required_hashes(hsh1, hsh2)
         hsh1.merge(hsh2) do |key, old_value, new_value|
           if [old_value, new_value].all? { |v| v.is_a?(Hash) }
@@ -51,6 +53,20 @@ module Sheng
           raise MergeField::NotAMergeFieldError.new(label)
         end
         label
+      end
+
+      def is_numeric?(value)
+        value.is_a?(Numeric) || !!NUMERIC_REGEX.match(value)
+      end
+
+      def typecast_numeric(value)
+        return value if value.is_a?(Numeric) || !NUMERIC_REGEX.match(value)
+        val = value.gsub(",", "").to_d
+        if val.frac == 0
+          val.to_i
+        else
+          val
+        end
       end
     end
   end

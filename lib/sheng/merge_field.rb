@@ -5,10 +5,8 @@ module Sheng
     MATH_TOKENS = %w[+ - / * ( )]
     REGEXES = {
       instruction_text: /^\s*MERGEFIELD(.*)\\\* MERGEFORMAT\s*$/,
-      key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/,
-      numeric_string: /^[-+]?[0-9]*\.?[0-9]+$/
+      key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/
     }
-    ALLOWED_FILTERS = [:upcase, :downcase, :capitalize, :titleize, :reverse]
 
     class NotAMergeFieldError < StandardError; end
 
@@ -25,7 +23,7 @@ module Sheng
     def initialize(element)
       @element = element
       @xml_document = element.document
-      @instruction_text = mergefield_instruction_text
+      @instruction_text = Sheng::Support.extract_mergefield_instruction_text(element)
     end
 
     def ==(other)
@@ -46,11 +44,7 @@ module Sheng
     end
 
     def raw_key
-      @raw_key ||= mergefield_instruction_text.gsub(REGEXES[:instruction_text], '\1').strip
-    end
-
-    def mergefield_instruction_text
-      Sheng::Support.extract_mergefield_instruction_text(element)
+      @raw_key ||= @instruction_text.gsub(REGEXES[:instruction_text], '\1').strip
     end
 
     def styling_paragraph
@@ -184,15 +178,22 @@ module Sheng
     end
 
     def replace_mergefield(value)
+      value_as_string = if value.is_a?(BigDecimal)
+        value.to_s("F")
+      else
+        value.to_s
+      end
+
       new_run = Sheng::Support.new_text_run(
-        value, xml_document: xml_document, style_run: styling_run
+        value_as_string, xml_document: xml_document, style_run: styling_run
       )
       xml.before(new_run)
       xml.remove
     end
 
     def key_parts
-      @key_parts ||= key.gsub(".", "_DOTSEPARATOR_").
+      @key_parts ||= key.gsub(",", "").
+        gsub(".", "_DOTSEPARATOR_").
         split(/\b|\s/).
         map(&:strip).
         reject(&:empty?).
@@ -203,7 +204,7 @@ module Sheng
 
     def required_variables
       key_parts.reject { |token|
-        REGEXES[:numeric_string].match(token) || MATH_TOKENS.include?(token)
+        Support.is_numeric?(token) || MATH_TOKENS.include?(token)
       }
     end
 
@@ -224,7 +225,7 @@ module Sheng
 
     def get_value(data_set)
       interpolated_string = key_parts.map { |token|
-        if REGEXES[:numeric_string].match(token) || MATH_TOKENS.include?(token)
+        if Support.is_numeric?(token) || MATH_TOKENS.include?(token)
           token
         else
           data_set.fetch(token)
@@ -233,13 +234,13 @@ module Sheng
 
       return interpolated_string unless key_has_math?
 
-      Dentaku::Calculator.new.evaluate!(interpolated_string)
+      Dentaku::Calculator.new.evaluate!(interpolated_string.gsub(",", ""))
     end
 
     def interpolate(data_set)
       value = get_value(data_set)
       replace_mergefield(filter_value(value))
-    rescue DataSet::KeyNotFound, Dentaku::UnboundVariableError
+    rescue DataSet::KeyNotFound, Dentaku::UnboundVariableError, Filters::UnsupportedFilterError
       # Ignore this error; we'll collect all uninterpolated fields later and
       # raise a new exception, so we can list all the fields in an error
       # message.
@@ -247,12 +248,9 @@ module Sheng
     end
 
     def filter_value(value)
-      filters.inject(value) { |val, filter|
-        if ALLOWED_FILTERS.include?(filter.to_sym) && val.respond_to?(filter.to_sym)
-          val.send(filter)
-        else
-          val
-        end
+      filters.inject(value) { |val, filter_string|
+        filterer = Filters.filter_for(filter_string)
+        filterer.filter(val)
       }
     end
   end

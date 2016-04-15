@@ -1,6 +1,6 @@
 module Sheng
   class CheckBox
-    attr_reader :element, :xml_document
+    attr_reader :element, :xml_document, :errors
 
     class << self
       def from_element(element)
@@ -11,6 +11,7 @@ module Sheng
     def initialize(element = nil)
       @element = element
       @xml_document = element.document
+      @errors = []
     end
 
     def ==(other)
@@ -29,7 +30,8 @@ module Sheng
       value = data_set.fetch(key)
       checked_attribute = @element.search('.//w:default').first.attribute('val')
       checked_attribute.value = value_is_truthy?(value) ? '1' : '0'
-    rescue DataSet::KeyNotFound
+    rescue DataSet::KeyNotFound => e
+      @errors << e
       # Ignore this error; if the key for this checkbox is not found in the
       # data set, we don't want to uncheck the checkbox; we just want to leave
       # it alone.

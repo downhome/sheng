@@ -71,17 +71,21 @@ describe Sheng::CheckBox do
       expect(default_checked.xml_document).to be_equivalent_to fragment_with_unchecked_box(default_checked.xml_document)
     end
 
-    it "does not check the checkbox if key is not found in dataset" do
-      dataset = Sheng::DataSet.new({})
+    it "records error and does not check the checkbox if key is not found in dataset" do
+      allow(dataset).to receive(:fetch).with("goats").and_raise(Sheng::DataSet::KeyNotFound, "uhoh")
       subject.interpolate(dataset)
       expect(subject.xml_document).to be_equivalent_to fragment_with_unchecked_box(subject.xml_document)
+      expect(subject.errors.first).to be_a(Sheng::DataSet::KeyNotFound)
+      expect(subject.errors.first.message).to eq("uhoh")
     end
 
-    it "does not uncheck a checked checkbox if key is not found in dataset" do
-      dataset = Sheng::DataSet.new({})
+    it "records error and does not uncheck a checked checkbox if key is not found in dataset" do
+      allow(dataset).to receive(:fetch).with("goats").and_raise(Sheng::DataSet::KeyNotFound, "uhoh")
       default_checked = described_class.new(fragment_with_checked_box(subject.xml_document))
       default_checked.interpolate(dataset)
       expect(default_checked.xml_document).to be_equivalent_to xml_fragment('output/check_box/check_box')
+      expect(default_checked.errors.first).to be_a(Sheng::DataSet::KeyNotFound)
+      expect(default_checked.errors.first.message).to eq("uhoh")
     end
   end
 end

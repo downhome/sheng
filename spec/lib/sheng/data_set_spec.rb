@@ -43,7 +43,7 @@ describe Sheng::DataSet do
     it 'raises a KeyNotFound error if key not found' do
       expect {
         subject.fetch('rabbits.funky')
-      }.to raise_error(described_class::KeyNotFound, "did not find in dataset: rabbits.funky (funky not found)")
+      }.to raise_error(described_class::KeyNotFound, "rabbits.funky (at funky)")
     end
 
     it 'does not raise error on key not found if default given' do

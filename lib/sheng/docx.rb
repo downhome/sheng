@@ -5,7 +5,9 @@
 module Sheng
   class Docx
     class InvalidFile < StandardError; end
+    class TemplateError < StandardError; end
     class FileAlreadyExists < StandardError; end
+    class GenerateError < StandardError; end
 
     WMLFileNamePatterns = [
       /word\/document.xml/,
@@ -14,9 +16,12 @@ module Sheng
       /word\/footer(\d)*.xml/
     ]
 
+    attr_reader :errors
+
     def initialize(input_file_path, params)
       @input_zip_file = Zip::File.new(input_file_path)
       @data_set = DataSet.new(params)
+      @errors = {}
     rescue Zip::Error => e
       raise InvalidFile.new(e.message)
     end
@@ -42,7 +47,19 @@ module Sheng
         raise FileAlreadyExists, "File at #{path} already exists"
       end
 
-      buffer = Zip::OutputStream.write_buffer do |out|
+      output_buffer = generate_output_buffer
+
+      if errors.present?
+        raise GenerateError.new(errors)
+      end
+
+      File.open(path, "w") { |f| f.write(output_buffer.string) }
+    end
+
+  private
+
+    def generate_output_buffer
+      Zip::OutputStream.write_buffer do |out|
         begin
           @input_zip_file.entries.each do |entry|
             write_converted_zip_file_to_buffer(entry, out)
@@ -51,11 +68,7 @@ module Sheng
           out.close_buffer
         end
       end
-
-      File.open(path, "w") { |f| f.write(buffer.string) }
     end
-
-  private
 
     def write_converted_zip_file_to_buffer(entry, buffer)
       contents = entry.get_input_stream.read
@@ -63,6 +76,7 @@ module Sheng
       if is_wml_file?(entry.name)
         wml_file = WMLFile.new(entry.name, contents)
         buffer.write wml_file.interpolate(@data_set)
+        errors.merge!(wml_file.errors)
       else
         buffer.write contents
       end

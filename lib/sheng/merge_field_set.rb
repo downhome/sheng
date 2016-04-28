@@ -4,17 +4,25 @@ module Sheng
   class MergeFieldSet
     include PathHelpers
 
-    attr_reader :xml_fragment, :xml_document, :key
+    attr_reader :xml_fragment, :xml_document, :key, :errors
 
     def initialize(key, xml_fragment)
       @key = key
       @xml_fragment = xml_fragment
       @xml_document = xml_fragment.document
+      @errors = {}
     end
 
     def interpolate(data_set)
       nodes.each do |node|
         node.interpolate(data_set)
+        add_errors_from_node(node)
+      end
+    end
+
+    def add_errors_from_node(node)
+      if node.errors.present?
+        errors[node.raw_key] = node.errors
       end
     end
 

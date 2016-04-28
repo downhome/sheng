@@ -1,7 +1,7 @@
 module Sheng
   class Block < MergeFieldSet
-    class MissingEndTag < StandardError; end
-    class ImproperNesting < StandardError; end
+    class MissingEndTag < Docx::TemplateError; end
+    class ImproperNesting < Docx::TemplateError; end
 
     def initialize(merge_field)
       @start_field = merge_field

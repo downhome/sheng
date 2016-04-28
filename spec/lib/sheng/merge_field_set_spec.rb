@@ -4,11 +4,35 @@ describe Sheng::MergeFieldSet do
 
   describe '#interpolate' do
     it 'iterates through nodes and calls interpolate on each' do
-      node1, node2 = double('Node'), double('Node')
+      node1, node2 = double('Node', errors: []), double('Node', errors: [])
       expect(node1).to receive(:interpolate).with(:the_data_set)
       expect(node2).to receive(:interpolate).with(:the_data_set)
       allow(subject).to receive(:nodes).and_return([node1, node2])
       subject.interpolate(:the_data_set)
+      expect(subject.errors).to be_empty
+    end
+
+    context "with mergefields that raise errors on interpolation" do
+      it "should compile all errors" do
+        node1, node2, node3 =
+          double('Node', raw_key: "node1"),
+          double('Node', raw_key: "node2"),
+          double('Node', raw_key: "node3")
+        allow(node1).to receive(:interpolate).with(:the_data_set)
+        allow(node2).to receive(:interpolate).with(:the_data_set)
+        allow(node3).to receive(:interpolate).with(:the_data_set)
+        allow(node1).to receive(:errors).and_return(["stupid", "oops"])
+        allow(node2).to receive(:errors).and_return({ "node4" => ["uhoh", "darnit"] })
+        allow(node3).to receive(:errors).and_return([])
+        allow(subject).to receive(:nodes).and_return([node1, node2, node3])
+        subject.interpolate(:the_data_set)
+        expect(subject.errors).to eq({
+          "node1" => ["stupid", "oops"],
+          "node2" => {
+            "node4" => ["uhoh", "darnit"]
+          }
+        })
+      end
     end
 
     context "with fields that are not valid mergefields" do

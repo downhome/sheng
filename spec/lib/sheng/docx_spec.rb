@@ -26,7 +26,7 @@ describe Sheng::Docx do
       File.open(output_file, "w").write("nothing")
       expect {
         subject.generate(output_file)
-      }.to raise_error(described_class::FileAlreadyExists)
+      }.to raise_error(described_class::OutputPathAlreadyExists)
     end
 
     it 'overwrites file if file already exists but force option is true' do
@@ -68,7 +68,7 @@ describe Sheng::Docx do
       doc = described_class.new(input_file, incomplete_hash)
       expect {
         doc.generate(output_file)
-      }.to raise_error(Sheng::Docx::GenerateError)
+      }.to raise_error(Sheng::Docx::MergeError)
       expect(doc.errors.keys).to eq(["first_name", "last_name"])
       expect(doc.errors["first_name"].map(&:message)).to eq(["first_name (at first_name)"])
     end
@@ -83,13 +83,13 @@ describe Sheng::Docx do
     end
 
     it_should_behave_like 'a bad document', 'with_field_not_in_dataset.docx',
-      Sheng::Docx::GenerateError, {"extra_name"=>[Sheng::DataSet::KeyNotFound.new("extra_name (at extra_name)")] }.to_s
+      Sheng::Docx::MergeError, {"extra_name"=>[Sheng::DataSet::KeyNotFound.new("extra_name (at extra_name)")] }.to_s
 
     it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
       Sheng::Docx::TemplateError, "no end tag for start:owner_signature"
 
     it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
-      Sheng::Docx::GenerateError, {"end:owner_signature"=>[Sheng::DataSet::KeyNotFound.new("owner_signature (at owner_signature)")] }.to_s
+      Sheng::Docx::MergeError, {"end:owner_signature"=>[Sheng::DataSet::KeyNotFound.new("owner_signature (at owner_signature)")] }.to_s
 
     it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
       Sheng::Docx::TemplateError, "expected end tag for start:birds, got end:animals"

@@ -8,7 +8,7 @@ module Sheng
       key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/
     }
 
-    class NotAMergeFieldError < StandardError; end
+    class NotAMergeFieldError < Sheng::Error; end
 
     class << self
       def from_element(element)

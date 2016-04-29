@@ -1,6 +1,6 @@
 module Sheng
   module Filters
-    class UnsupportedFilterError < StandardError; end
+    class UnsupportedFilterError < Sheng::Error; end
 
     class << self
       def registry

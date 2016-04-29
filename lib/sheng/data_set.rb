@@ -1,6 +1,6 @@
 module Sheng
   class DataSet
-    class KeyNotFound < StandardError; end
+    class KeyNotFound < Sheng::Error; end
 
     attr_accessor :raw_hash
 

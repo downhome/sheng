@@ -4,10 +4,10 @@
 #
 module Sheng
   class Docx
-    class InvalidFile < StandardError; end
-    class TemplateError < StandardError; end
-    class FileAlreadyExists < StandardError; end
-    class GenerateError < StandardError; end
+    class InvalidFile < Sheng::Error; end
+    class TemplateError < Sheng::Error; end
+    class OutputPathAlreadyExists < Sheng::Error; end
+    class MergeError < Sheng::Error; end
 
     WMLFileNamePatterns = [
       /word\/document.xml/,
@@ -44,13 +44,13 @@ module Sheng
 
     def generate(path, force: false)
       if File.exists?(path) && !force
-        raise FileAlreadyExists, "File at #{path} already exists"
+        raise OutputPathAlreadyExists, "File at #{path} already exists"
       end
 
       output_buffer = generate_output_buffer
 
       if errors.present?
-        raise GenerateError.new(errors)
+        raise MergeError.new(errors)
       end
 
       File.open(path, "w") { |f| f.write(output_buffer.string) }

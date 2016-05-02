@@ -1,6 +1,6 @@
 module Sheng
   class DataSet
-    class KeyNotFound < StandardError; end
+    class KeyNotFound < Sheng::Error; end
 
     attr_accessor :raw_hash
 
@@ -29,7 +29,7 @@ module Sheng
           if options.has_key?(:default)
             value = options[:default]
           else
-            raise KeyNotFound, "did not find in dataset: #{key} (#{key_part} not found)"
+            raise KeyNotFound, "#{key} (at #{key_part})"
           end
         end
         if (i + 1) < key_parts.length

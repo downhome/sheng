@@ -212,23 +212,34 @@ describe Sheng::MergeField do
       expect(subject.xml_document).to be_equivalent_to xml_fragment('output/merge_field/merge_field')
     end
 
-    it "does not replace and returns nil if any keys not found" do
-      allow(subject).to receive(:get_value).with(:a_dataset).and_raise(Sheng::DataSet::KeyNotFound)
+    it "does not replace, records error, and returns nil if any keys not found" do
+      allow(subject).to receive(:get_value).with(:a_dataset).and_raise(Sheng::DataSet::KeyNotFound.new("horses"))
       expect(subject).to receive(:replace_mergefield).never
       expect(subject.interpolate(:a_dataset)).to be_nil
+      expect(subject.errors.first).to be_a(Sheng::DataSet::KeyNotFound)
+      expect(subject.errors.first.message).to eq("horses")
     end
 
-    it "does not replace and returns nil if calculation error encountered" do
-      allow(subject).to receive(:get_value).with(:a_dataset).and_raise(Dentaku::UnboundVariableError.new([]))
+    it "does not replace, records error, and returns nil if calculation error encountered" do
+      allow(subject).to receive(:get_value).with(:a_dataset).and_raise(Dentaku::UnboundVariableError.new([:foo, :bar]))
       expect(subject).to receive(:replace_mergefield).never
       expect(subject.interpolate(:a_dataset)).to be_nil
+      expect(subject.errors.first).to be_a(Dentaku::UnboundVariableError)
+      expect(subject.errors.first.unbound_variables).to eq([:foo, :bar])
     end
 
-    it "does not replace and returns nil if unsupported filter requested" do
+    it "does not replace, records error, and returns nil if unsupported filter requested" do
       allow(subject).to receive(:get_value).with(:a_dataset).and_return(:got_value)
-      allow(subject).to receive(:filter_value).with(:got_value).and_raise(Sheng::Filters::UnsupportedFilterError)
+      allow(subject).to receive(:filter_value).with(:got_value).and_raise(Sheng::Filters::UnsupportedFilterError.new("woof"))
       expect(subject).to receive(:replace_mergefield).never
       expect(subject.interpolate(:a_dataset)).to be_nil
+      expect(subject.errors.first).to be_a(Sheng::Filters::UnsupportedFilterError)
+      expect(subject.errors.first.message).to eq("woof")
+    end
+
+    it "does not rescue other exceptions" do
+      allow(subject).to receive(:get_value).with(:a_dataset).and_raise(NoMethodError)
+      expect { subject.interpolate(:a_dataset) }.to raise_error(NoMethodError)
     end
   end
 

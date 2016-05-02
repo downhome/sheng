@@ -26,7 +26,7 @@ describe Sheng::Docx do
       File.open(output_file, "w").write("nothing")
       expect {
         subject.generate(output_file)
-      }.to raise_error(described_class::FileAlreadyExists)
+      }.to raise_error(described_class::OutputPathAlreadyExists)
     end
 
     it 'overwrites file if file already exists but force option is true' do
@@ -63,12 +63,14 @@ describe Sheng::Docx do
       end
     end
 
-    it "should raise an error when one or more mergefields isn't merged" do
+    it "should raise an exception and set errors when one or more mergefields isn't merged" do
       incomplete_hash = JSON.parse(File.read(fixture_path("inputs/incomplete.json")))
       doc = described_class.new(input_file, incomplete_hash)
       expect {
         doc.generate(output_file)
-      }.to raise_error(Sheng::WMLFile::MergefieldNotReplacedError, "Mergefields not replaced: first_name, last_name")
+      }.to raise_error(Sheng::Docx::MergeError)
+      expect(doc.errors.keys).to eq(["first_name", "last_name"])
+      expect(doc.errors["first_name"].map(&:message)).to eq(["first_name (at first_name)"])
     end
 
     shared_examples_for 'a bad document' do |filename, error, error_message = nil|
@@ -81,16 +83,16 @@ describe Sheng::Docx do
     end
 
     it_should_behave_like 'a bad document', 'with_field_not_in_dataset.docx',
-      Sheng::WMLFile::MergefieldNotReplacedError
+      Sheng::Docx::MergeError, {"extra_name"=>[Sheng::DataSet::KeyNotFound.new("extra_name (at extra_name)")] }.to_s
 
     it_should_behave_like 'a bad document', 'with_unended_sequence.docx',
-      Sheng::Sequence::MissingEndTag, "no end tag for start:owner_signature"
+      Sheng::Docx::TemplateError, "no end tag for start:owner_signature"
 
     it_should_behave_like 'a bad document', 'with_missing_sequence_start.docx',
-      Sheng::WMLFile::MergefieldNotReplacedError
+      Sheng::Docx::MergeError, {"end:owner_signature"=>[Sheng::DataSet::KeyNotFound.new("owner_signature (at owner_signature)")] }.to_s
 
     it_should_behave_like 'a bad document', 'with_poorly_nested_sequences.docx',
-      Sheng::Sequence::ImproperNesting, "expected end tag for start:birds, got end:animals"
+      Sheng::Docx::TemplateError, "expected end tag for start:birds, got end:animals"
   end
 
   describe '#new' do

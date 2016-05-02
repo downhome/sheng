@@ -8,7 +8,7 @@ module Sheng
       key_string: /^(?<prefix>start:|end:|if:|end_if:|unless:|end_unless:)?\s*(?<key>[^\|]+)\s*\|?(?<filters>.*)?/
     }
 
-    class NotAMergeFieldError < StandardError; end
+    class NotAMergeFieldError < Sheng::Error; end
 
     class << self
       def from_element(element)
@@ -18,12 +18,13 @@ module Sheng
       end
     end
 
-    attr_reader :element, :xml_document
+    attr_reader :element, :xml_document, :errors
 
     def initialize(element)
       @element = element
       @xml_document = element.document
       @instruction_text = Sheng::Support.extract_mergefield_instruction_text(element)
+      @errors = []
     end
 
     def ==(other)
@@ -240,7 +241,8 @@ module Sheng
     def interpolate(data_set)
       value = get_value(data_set)
       replace_mergefield(filter_value(value))
-    rescue DataSet::KeyNotFound, Dentaku::UnboundVariableError, Filters::UnsupportedFilterError
+    rescue DataSet::KeyNotFound, Dentaku::UnboundVariableError, Filters::UnsupportedFilterError => e
+      @errors << e
       # Ignore this error; we'll collect all uninterpolated fields later and
       # raise a new exception, so we can list all the fields in an error
       # message.

@@ -21,7 +21,6 @@ module Sheng
       def insert_commas(integer)
         integer.reverse!.gsub!(/(\d{3})(?=\d)/, '\\1,').reverse!
       end
-
     end
   end
 end

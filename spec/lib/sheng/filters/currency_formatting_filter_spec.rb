@@ -4,7 +4,9 @@ describe Sheng::Filters::CurrencyFormattingFilter do
   test_cases = [
     { method: :currency, input: 3452341.826, output: "3,452,341.83" },
     { method: :currency, input: "1645.3", output: "1,645.30" },
+    { method: :currency, input: "1,645.3", arguments: ["-$"], output: "-$1,645.30" },
     { method: :currency, input: 192.3, output: "192.30" },
+    { method: :currency, input: "19.3", output: "19.30" },
     { method: :currency, arguments: ["¥"], input: "12351.184", output: "¥12,351.18" }
   ]
 

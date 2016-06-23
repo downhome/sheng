@@ -7,6 +7,8 @@ module Sheng
 
       def filter(value)
         return value unless Sheng::Support.is_numeric?(value)
+        value = Sheng::Support.typecast_numeric(value)
+
         integer, fractional = ("%00.2f" % value).split(".")
 
         if integer.length > 3
